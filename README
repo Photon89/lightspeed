@@ -1,3 +1,18 @@
+## Light Speed!
+
+This is a fork of Light Speed! by @iskunk trying to port the app to GTK2 and, potentially, to GTK3 at some point. The original project's website is http://lightspeed.sourceforge.net/.
+
+#### Build instructions:
+
+~~~
+autoreconf -i
+./configure
+make
+make install
+~~~
+
+#### The README from the original project
+
 ==== Light Speed! ====
 
 
