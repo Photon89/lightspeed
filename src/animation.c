@@ -27,7 +27,7 @@
 
 
 /* Forward declarations */
-static int idle_loop( void );
+static int idle_loop( gpointer );
 static int transition_engine( trans_var *new_tvar );
 
 
@@ -70,7 +70,7 @@ update( int message )
 			return FALSE; /* already running */
 		active = TRUE;
 		/* Hook our idle loop in */
-		gtk_idle_add( (GtkFunction)idle_loop, NULL );
+		g_idle_add_full(G_PRIORITY_LOW, idle_loop, NULL ,NULL);
 		return TRUE;
 
 	default:
@@ -121,7 +121,7 @@ update( int message )
 /* "Lackey" idle loop for update( )
  * Remember, returning TRUE makes loop run again, returning FALSE stops it... */
 static int
-idle_loop( void )
+idle_loop( gpointer )
 {
 	return update( ITERATION );
 }
