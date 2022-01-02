@@ -1,17 +1,21 @@
-# configure.in
+# configure.am
 #
 # Process this file with autoconf to produce a configure script.
 #
-AC_INIT(src/lightspeed.c)
+### AC_INIT
+AC_CONFIG_SRCDIR([src/lightspeed.c])
+
+m4_define([lightspeed_major_version], [1])
+m4_define([lightspeed_minor_version], [2a])
+m4_define([lightspeed_version], [glib_major_version.glib_minor_version])
+
+AC_INIT([lightspeed],[lightspeed_version])
+
+AC_CONFIG_SRCDIR([src/lightspeed.c])
 AC_CONFIG_AUX_DIR(config)
+AC_CONFIG_HEADERS(config.h)
 
-AM_CONFIG_HEADER(config.h)
-
-LIGHTSPEED_VERSION_MAJOR=1
-LIGHTSPEED_VERSION_MINOR=2a
-
-LIGHTSPEED_VERSION=$LIGHTSPEED_VERSION_MAJOR.$LIGHTSPEED_VERSION_MINOR
-AM_INIT_AUTOMAKE(lightspeed, $LIGHTSPEED_VERSION)
+AM_INIT_AUTOMAKE
 
 # Check for programs
 #
@@ -22,14 +26,12 @@ AC_PROG_CPP
 
 # Check for header files
 #
-AC_HEADER_STDC
 AC_CHECK_HEADERS(getopt.h malloc.h sys/time.h)
 
 # Check for typedefs, structures, and compiler characteristics.
 #
 AC_C_CONST
 AC_TYPE_SIZE_T
-AC_HEADER_TIME
 
 # Check for library functions
 #
@@ -88,10 +90,7 @@ GTKGL_LIBS="$GTKGL_LDOPTS -lgtkgl-2.0"
       -lz -lm)
     if test "$png_ok" = yes; then
       AC_MSG_CHECKING([for png_structp in png.h])
-      AC_TRY_COMPILE([#include <png.h>],
-        [png_structp pp; png_infop info; png_colorp cmap; png_create_read_struct;],
-        png_ok=yes,
-        png_ok=no)
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <png.h>]], [[png_structp pp; png_infop info; png_colorp cmap; png_create_read_struct;]])],[png_ok=yes],[png_ok=no])
       AC_MSG_RESULT($png_ok)
       if test "$png_ok" = yes; then
         PNG='png'; LIBPNG_LIB='-lpng -lz -lm'
@@ -139,6 +138,10 @@ IMG_LIBS="$LIBPNG_LIB $LIBTIFF_LIB"
 CFLAGS="$CFLAGS $GTK_CFLAGS $GL_CFLAGS $GTKGL_CFLAGS"
 LIBS="$LIBS $GTKGL_LIBS $GTK_LIBS $GL_LIBS $IMG_LIBS"
 
-AC_OUTPUT(Makefile src/Makefile)
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT
+
+AH_TEMPLATE([HAVE_LIBPNG])
+AH_TEMPLATE([HAVE_LIBTIFF])
 
 # end configure.in
