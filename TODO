@@ -1,0 +1,19 @@
+BUG:importobjs.c: triangulate_polygon( ) does not work properly. Some
+    LightWave models may get a wee bit mangled...
+
+BUG:menu_cbs.c: highlight_entry( ) does not work after a set_entry_text( )
+    (appears to be a bug in GTK+, I've sent in a report)
+
+BUG:menu_cbs.c: Dialogs do not hide properly before viewport is blanked
+    (e.g. when generating a lattice, or loading a file. The dialog either
+    leaves a lovely grey rectangle on the viewport, or doesn't hide at all
+    until too late :P )  Not sure how to fix this.
+
+BUG:menu_cbs.c: Velocity input entry should have automagically inserted
+    commas. gtk_entry_set_position( ) isn't cooperating, however :(
+
+TODO: Anyone want to translate lstrings.c? E-mail me if so, I will
+appreciate it greatly!
+
+TODO: Note in docs that Lorentz contraction / optical aberration toggles
+have no effect on exported SRS file

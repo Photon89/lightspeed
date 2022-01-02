@@ -1,0 +1,65 @@
+1.3 (?? July 2001)
+------------------
+
+* Project moved to SourceForge.
+
+* Updated documentation (e-mail addresses, links, writing style, etc.)
+
+
+1.2 (24 April 1999)
+-------------------
+
+* Added keybindings for most operations. Those GtkAccelerator functions
+really need better documentation.
+
+* Upgraded profiler to calculate framerate using a variable-length
+frametime buffer. The fps readout shouldn't fluctuate so wildly anymore on
+super-fast hardware.
+
+* Small fix to velocity_entry( ) so that commas are also added when
+velocity units are changed.
+
+* Small changes to set_entry_width( ) and some GtkEntry handling.
+
+* Updated gtkgl interface to use the newer API. (Note: compat.h maintains
+older GtkGLArea compatibility)
+
+* More configure script fixes.
+
+
+1.1 (14 April 1999)
+-------------------
+
+* Added a vertical slider for velocity control. Thanks go to Stijn Buys
+for [being the first to send in] this excellent suggestion!
+
+* Added kilometers/hour velocity units, and removed kilometers/second
+(km/s was kind of redundant anyway)
+
+* Moved all language-specific program strings into lstrings.c. Light
+Speed! is ready to go international! (Please contact me if you wish to do
+translations, I will greatly appreciate it)
+
+* TIFF exporter fixed. (no segfaults! yay!)
+
+* Added heuristic for calculating camera distance when specifying its
+position with xyz/angles. This needs field testing; any opinions?
+
+* Remade title.xpm (for the About dialog), toning down the glow a bit.
+(you see, I have a *really dark* monitor :-)
+
+* Modified break_transition( ) and related code in transition_engine( ) to
+work more efficiently (was causing problems with the velocity slider)
+
+* Exported time-string generation code from infodisp.c to misc.c. This
+whole bit is all in time_string( ) now.
+
+* configure script fixes. Test for libpng now leaves off the -lgtkgl; a
+few other rough edges filed down too. Should I add a prefix option for
+libpng, libtiff, et. al.?
+
+
+1.0 (4 April 1999)
+------------------
+
+* Initial release.

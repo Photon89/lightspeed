@@ -1,0 +1,251 @@
+The Mathematics behind Light Speed!
+===================================
+
+This file describes the mathematical framework of the relativistic
+transforms exhibited in the Light Speed! simulator. In particular, the
+formulae and some details of their implementation are given below.
+
+
+==== THE LORENTZ CONTRACTION ====
+
+A moving object will appear shorter than it does at rest, due to an
+oblique alignment in four-dimensional space-time imparted to it by its
+motion. Specifically, the object will appear compressed along its axis of
+travel, scaled down by a factor which is exactly the Lorentz factor, also
+known as gamma:
+
+	                  1
+	gamma = ---------------------
+	         sqrt( 1 - (v/c)^2 )
+
+where v is the velocity of the object, and c is the speed of light. For
+most everyday values of v, gamma is practically 1. As v approaches the
+speed of light, however, gamma grows without bound.
+
+Assuming that a vehicle's length L is parallel with its axis of travel,
+its observed length L' at any velocity (below that of light!) is:
+
+	L' = L / gamma
+
+This predicts that an object travelling at the speed of light will appear
+to have no length (and hence no volume), while retaining its frontal
+cross-sectional area. If the object were a rocket, for example, it would
+appear to have become a flying disc.
+
+
+==== THE DOPPLER RED/BLUE SHIFT and THE HEADLIGHT EFFECT ====
+
+These are transformations upon the color hue and intensity attributes of
+an object, respectively. Either is based upon the motion of a light source
+(whether by emission or reflection) with respect to a receiver or observer
+of its light. If the source is approaching the observer, it will appear
+blue-shifted (its light higher in frequency) and brighter. If it is moving
+away, it will appear red-shifted (lower in frequency) and darker. In Light
+Speed!, there are two instances where these effects are applied:
+
+	1. Ambient light striking (illuminating) the object
+	2. The object reflecting light toward the observer
+
+The first takes into account how the object is illuminated. If the object
+were a space vessel, travelling at relativistic speed, an onboard observer
+will notice that (for example) stars and planetary bodies ahead of the
+ship appear brighter and blue-shifted. Because of this, the nose of the
+ship will be bathed in a relatively bright, bluish light. The light it
+reflects, then, will also have this character.
+
+The second instance handles the color effects as naturally expected from
+the motion of the object, with respect to the camera.
+
+Both effects depend on the relative motion between a source point and a
+receiving point, one in motion and the other at rest. As such, the formula
+for either transform contains the term:
+
+	 v
+	--- * cos a
+	 c
+
+in which:
+  v = forward velocity of the moving point
+  c = speed of light
+  a = (alpha) angle subtended between the motion vector of the moving
+      point and the vector connecting the two points
+      (moving-to-stationary)
+
+This value is nothing more than the rate (as a factor of c, between 1.0
+and -1.0) at which the two points are approaching or moving away from one
+another.
+
+With that pointed out, the formula describing the Doppler effect is as
+follows:
+
+	 n'      1 + (v/c)*cos a
+	--- = ---------------------
+	 n     sqrt( 1 - (v/c)^2 )
+
+The n'/n (nu-prime over nu) is a frequency ratio. Multiplying the
+frequency of the source lighting by this value will give the frequency as
+observed by the receiver.
+
+(Also, note that the denominator is the reciprocal of the gamma factor.
+This accounts for the effect of time dilation upon the frequency, which to
+some extent always increases it).
+
+The Doppler shift routines used in Light Speed! were written by Antony
+Searle, and actually work with the reciprocal of this value, n/n', which
+is the _wavelength_ ratio between the two states of light. These routines
+are not trivial, as they accept an RGB-triplet color as input, and produce
+an RGB-triplet as output. The RGB representation must be converted to a
+rough spectrum to make the wavelength ratio meaningful, and then sampled
+into RGB again as this format is required by the graphics system. The
+resulting colors are only an approximation, with some assumptions made as
+to the character of light involved, but Mr. Searle's implementation has
+the important advantage of computational simplicity-- and thereby speed.
+
+The formula describing the headlight effect is similar:
+
+	 I'    (1 + (v/c)*cos a)^2
+	--- = ---------------------
+	 I     sqrt( 1 - (v/c)^2 )
+
+(The only difference to the previous formula is in the squaring of the
+numerator)
+
+I'/I is an intensity ratio, again multiplying that of the source light to
+produce what is observed by the receiver.
+
+RGB colors can be directly manipulated by this value (i.e. multiplying
+each color component with it), although better intensity transforms may
+exist. (Some of the intensity-adjustment routines of quality paint
+programs come to mind).
+
+
+==== OPTICAL ABERRATION ====
+
+This results from the phenomena of delayed observation; i.e. we do not see
+things, but the light reflected from things. As light has a finite, albeit
+very high speed, there is a corresponding delay associated with our
+observation of events/things.
+
+In Light Speed!, the camera observes a moving object, which is comprised
+of various vertex points (interconnected in some arbitrary geometrical
+manner, be it triangles, quads, etc.) The position of each of these is
+known within a fiducial time frame, at the moment that the shutter is
+snapped. However, the camera perceives by way of light, whose propagation
+is not instantaneous. Thus it is necessary to translate each vertex of the
+object backward (w.r.t. the direction of travel) to an earlier position,
+specifically the position at which the camera is expected to observe the
+vertex-- at a slightly earlier point in time.
+
+There is one condition that this earlier position must satisfy: The time
+necessary for the vertex to travel from the earlier position to its
+position in the fiducial frame _must_exactly_equal_ the time necessary for
+light to travel from the earlier position of the vertex to the observer.
+
+
+(My apologies; this is very difficult to explain in a straightforward
+manner. Let me try a different approach...)
+
+
+If the object of concern consists of a single vertex, the problem may be
+illustrated geometrically as follows:
+
+	A *
+	  |\
+	  | \
+	  |  \
+	  |   \
+	  |    \
+	  |     \
+	B *      \
+	  |       \
+	  |        \
+	  |         \
+	  |          \
+	  |__         \
+	  |  |         \
+	C *-------------* O
+
+	      Fig. 1
+
+The object is traveling along the vector AC. At time T=-t (i.e. a short
+moment before T=0) it is at position A. At this moment, a photon strikes
+the object and reflects off its surface, beginning travel along the vector
+AO toward the observer O. The object continues along path AC.
+
+At time T=0, the object is at B, and the photon reaches O. The observer,
+seeing the photon, observes an image of the object at position A. (and,
+incidentally, has yet to see anything at position B)
+
+Whereas the image of the object is at A, the object itself is really at B;
+with the above thought experiment we have derived where the object will be
+(B) from the position of its image (A). Implementing a simulator, however,
+entails finding the image position A from the actual position B, taking
+into account the velocity v of the object and position O of the observer.
+The unknown length AB-- the image-to-object delta-- is what has to be
+calculated.
+
+This means calculating t, as AB is simply v*t. (Similarly, AO is c*t). In
+the geometrical sense, it is finding lengths AB and AO in the ratio v/c,
+scaled by some factor t which will make ACO a right triangle.
+
+For the sake of argument, let us say AC is the x-axis, with B being the
+origin. (This is close to how it is implemented in Light Speed!)
+
+Let:
+  x = x-position of the observer = distance BC;
+  y = y-position of the observer = distance CO;
+  v = velocity of the moving object;
+  c = speed of light.
+
+We start off with the right-triangle relationship (a.k.a. the Pythagorean
+Theorem), stating the square of the hypotenuse is equal to...:
+
+	(c*t)^2 = (v*t + x)^2 + y^2
+
+and then rearrange it into a quadratic equation of t:
+
+	(v^2 - c^2)*t^2 + (2*x*v)*t + (x^2 + y^2) = 0
+
+which yields the solution:
+
+	     -2*x*v - sqrt( (2*x*v)^2 - 4*(v^2 - c^2)*(x^2 + y^2) )
+	t = --------------------------------------------------------
+	                        2*(v^2 - c^2)
+
+(The sign on the radical must be negative to give a positive value for t.
+Note that the denominator is always negative, as v<c)
+
+This approach can be trivially extended to three dimensions by defining y
+as the distance in the YZ plane between the observer and the object's axis
+of travel.
+
+Note that in an actual implementation, x and y do not represent the
+position of the observer, but the x- and y-distance between the observer
+and a particular vertex of an object. (In the example above, the vertex
+was at x=0, y=0, making this distinction moot). This means that each
+vertex need not have the same associated value of t, which in turn means
+that all the vertices of an object will not necessarily be displaced the
+same amount. This is why full-fledged warping is the usual result of this
+transformation, as opposed to a simple uniform translation of the object's
+vertices.
+
+
+==== ADDITIONAL INFORMATION ====
+
+More information concerning the theory and physics behind these
+relativistic phenomena may be found at Antony Searle's ANU departmental
+seminar site, which proved by far to be the most valuble resource in
+creating Light Speed!:
+
+	http://www.anu.edu.au/Physics/Searle/Obsolete/Seminar.html
+
+As for further details of implementation, the ultimate documentation is
+the source code itself :-)  I have taken great pains to make it as
+transparent as possible, commenting it heavily and using a straightforward
+code structure. (Likewise for the entire program). All the code
+responsible for the above-described effects is contained within the file
+warp.c. Have a peek!
+
+
+=========================================
+Daniel Richard G. // <skunk@alum.mit.edu>
