@@ -626,56 +626,6 @@ add_label( GtkWidget *parent_w, const char *label_text )
 }
 
 
-/* Scrollable (but non-editing) text window
- * (I call it a "text area," as just "text" is ambiguous */
-GtkWidget *
-add_text_area( GtkWidget *parent_w, const char *content )
-{
-	GtkWidget *text_w;
-	GtkWidget *hbox_w;
-	GtkWidget *vscrollbar_w;
-
-	/* Horizontal box for text area + vertical scrollbar */
-	hbox_w = gtk_hbox_new( FALSE, 0 );
-	if (GTK_IS_BOX(parent_w))
-		gtk_box_pack_start( GTK_BOX(parent_w), hbox_w, TRUE, TRUE, 0 );
-	else
-		gtk_container_add( GTK_CONTAINER(parent_w), hbox_w );
-	gtk_widget_show( hbox_w );
-	/* Text [area] widget */
-	text_w = gtk_text_new( NULL, NULL );
-	/* Set properties suited for a text viewer */
-	gtk_text_set_editable( GTK_TEXT(text_w), FALSE );
-	gtk_text_set_word_wrap( GTK_TEXT(text_w), TRUE );
-	gtk_box_pack_start( GTK_BOX(hbox_w), text_w, TRUE, TRUE, 0 );
-	gtk_widget_show( text_w );
-	/* Vertical scroll bar */
-	/*TODO: Had to remove the next three lines to make compilation possible */
-	//vscrollbar_w = gtk_vscrollbar_new( GTK_TEXT(text_w)->vadj );
-	//gtk_box_pack_start( GTK_BOX(hbox_w), vscrollbar_w, FALSE, FALSE, 0 );
-	//gtk_widget_show( vscrollbar_w );
-
-	/* Bring in the text */
-	gtk_widget_realize( text_w );
-	gtk_text_insert( GTK_TEXT(text_w), NULL, NULL, NULL, content, -1 );
-
-	return text_w;
-}
-
-
-void
-add_tooltip( GtkWidget *ambiguous_widget, const char *tip_text )
-{
-	static GtkTooltips *tooltips = NULL;
-
-	if (tooltips == NULL) {
-		tooltips = gtk_tooltips_new( );
-		gtk_tooltips_set_delay( tooltips, 2000 );
-	}
-	gtk_tooltips_set_tip( tooltips, ambiguous_widget, tip_text, NULL );
-}
-
-
 /* Adds an XPM */
 GtkWidget *
 add_pixmap( GtkWidget *parent_w, GtkWidget *parent_window_w, char **xpm_data )
