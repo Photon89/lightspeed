@@ -45,12 +45,11 @@
 /* GTK+ */
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
+#include <gtk/gtktext.h>
+#include <gtk/gtkaccelgroup.h>
 
 /* Compile-time settings */
 #include "settings.h"
-
-/* For GTK+/glib 1.0 compatibility */
-#include "compat.h"
 
 /* Optional memory allocation tracking */
 #ifdef WITH_TRACKMEM

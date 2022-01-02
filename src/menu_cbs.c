@@ -1319,7 +1319,7 @@ menu_Camera_GraphicsMode_select( GtkWidget *widget, const int *message )
 #endif
 			break;
 		}
-		GTKGL_TEMP_endgl( GTK_GL_AREA(usr_cams[i]->ogl_w) );
+		//GTKGL_TEMP_endgl( GTK_GL_AREA(usr_cams[i]->ogl_w) );
 	}
 
 	/* Redraw everything */

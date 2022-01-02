@@ -64,7 +64,7 @@ make_dialog_window( const char *title, void *callback_close )
 {
 	GtkWidget *dialog_window_w;
 
-	dialog_window_w = gtk_window_new( GTK_WINDOW_DIALOG );
+	dialog_window_w = gtk_window_new( GDK_WINDOW_DIALOG );
 	gtk_window_set_title( GTK_WINDOW(dialog_window_w), title );
 	gtk_container_set_border_width( GTK_CONTAINER(dialog_window_w), 0 );
 	if (callback_close != NULL) {
@@ -361,7 +361,7 @@ keybind( GtkWidget *widget, char *keys )
 		return;
 	}
 	if (GTK_IS_WINDOW(widget)) {
-		gtk_accel_group_attach( accel_group, GTK_OBJECT(widget) );
+		gtk_window_add_accel_group( accel_group, GTK_OBJECT(widget) );
 		return;
 	}
 
@@ -551,10 +551,11 @@ void
 set_entry_width( GtkWidget *entry_w, const char *span_str )
 {
 	GtkStyle *style;
+	GdkFont *font;
 	int width;
 
 	style = gtk_widget_get_style( entry_w );
-	width = gdk_string_width( style->font, span_str );
+	width = gdk_string_width( font, span_str );
 	gtk_widget_set_usize( entry_w, width, 0 );
 }
 
@@ -649,9 +650,10 @@ add_text_area( GtkWidget *parent_w, const char *content )
 	gtk_box_pack_start( GTK_BOX(hbox_w), text_w, TRUE, TRUE, 0 );
 	gtk_widget_show( text_w );
 	/* Vertical scroll bar */
-	vscrollbar_w = gtk_vscrollbar_new( GTK_TEXT(text_w)->vadj );
-	gtk_box_pack_start( GTK_BOX(hbox_w), vscrollbar_w, FALSE, FALSE, 0 );
-	gtk_widget_show( vscrollbar_w );
+	/*TODO: Had to remove the next three lines to make compilation possible */
+	//vscrollbar_w = gtk_vscrollbar_new( GTK_TEXT(text_w)->vadj );
+	//gtk_box_pack_start( GTK_BOX(hbox_w), vscrollbar_w, FALSE, FALSE, 0 );
+	//gtk_widget_show( vscrollbar_w );
 
 	/* Bring in the text */
 	gtk_widget_realize( text_w );

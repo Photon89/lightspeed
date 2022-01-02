@@ -37,7 +37,7 @@ AC_CHECK_FUNCS(getopt_long gettimeofday strcspn strdup strtod)
 
 # Checks for GTK+ libraries.
 #
-AM_PATH_GTK(1.0.1, , AC_MSG_ERROR([Cannot find proper GTK+ version]))
+AM_PATH_GTK_2_0(2.0.1, , AC_MSG_ERROR([Cannot find proper GTK+ version]))
 
 #
 # Check for OpenGL libraries
@@ -69,11 +69,11 @@ if test -n "$with_gtkgl_prefix" ; then
 	GTKGL_LDOPTS="-L$with_gtkgl_prefix/lib"
 fi
 
-AC_CHECK_LIB(gtkgl, gtk_gl_area_new, ,
+AC_CHECK_LIB(gtkgl-2.0, gtk_gl_area_new, ,
 	AC_MSG_ERROR([Cannot find GtkGLArea library.]),
 	$GTKGL_LDOPTS $GTK_LIBS $GL_LIBS)
 
-GTKGL_LIBS="$GTKGL_LDOPTS -lgtkgl"
+GTKGL_LIBS="$GTKGL_LDOPTS -lgtkgl-2.0"
 
 #
 # Test for libpng
@@ -94,7 +94,7 @@ GTKGL_LIBS="$GTKGL_LDOPTS -lgtkgl"
         png_ok=no)
       AC_MSG_RESULT($png_ok)
       if test "$png_ok" = yes; then
-        PNG='png'; LIBPNG_LIB='-lpng -lz'
+        PNG='png'; LIBPNG_LIB='-lpng -lz -lm'
       else
         AC_MSG_WARN(*** PNG exporter cannot be built (PNG library is too old) ***)
       fi
@@ -136,7 +136,8 @@ IMG_LIBS="$LIBPNG_LIB $LIBTIFF_LIB"
 # That's a wrap!
 #
 
-CFLAGS="$CFLAGS $GTK_CFLAGS $GL_CFLAGS $GTKGL_CFLAGS"
+# FIXME: Need to add -DGTK_ENABLE_BROKEN for GTK_TEXT support in gtkwidgets.c
+CFLAGS="$CFLAGS $GTK_CFLAGS $GL_CFLAGS $GTKGL_CFLAGS -DGTK_ENABLE_BROKEN"
 LIBS="$LIBS $GTKGL_LIBS $GTK_LIBS $GL_LIBS $IMG_LIBS"
 
 AC_OUTPUT(Makefile src/Makefile)

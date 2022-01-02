@@ -443,17 +443,5 @@ ss( void )
 	glHint( GL_POLYGON_SMOOTH_HINT, GL_DONT_CARE );
 	glEnable( GL_LIGHTING );
 	glEnable( GL_DEPTH_TEST );
-	GTKGL_TEMP_endgl( GTK_GL_AREA(cam->ogl_w) );
-	gtk_gl_area_swapbuffers( GTK_GL_AREA(cam->ogl_w) );
+	gtk_gl_area_swap_buffers( GTK_GL_AREA(cam->ogl_w) );
 }
-
-
-/* NOP is referenced in compat.h
- * When no one in the world is using GTK 1.0, I'll get rid of this */
-int *NOP( void )
-{
-	while (FALSE);
-	return NULL;
-}
-
-/* end misc.c */

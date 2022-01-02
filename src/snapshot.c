@@ -27,6 +27,7 @@
 
 #ifdef HAVE_LIBPNG
 #include <png.h>
+#include <zlib.h>
 static int write_png( int message, const void *data );
 #endif
 
@@ -85,8 +86,9 @@ save_snapshot( int width, int height, const char *filename, int format )
 	err = !gdk_gl_pixmap_make_current( glpixmap, context );
 	if (err) {
 		message_window( STR_DLG_Error, STR_MSG_no_ogl_context );
-		gdk_gl_context_unref( context );
-		gdk_gl_pixmap_unref( glpixmap );
+		/*TODO: Had to remove the next two lines to make compilation possible */
+		// gdk_gl_context_unref( context );
+		// gdk_gl_pixmap_unref( glpixmap );
 		gdk_pixmap_unref( pixmap );
 		return -1;
 	}
@@ -178,9 +180,10 @@ save_snapshot( int width, int height, const char *filename, int format )
 
 	/* Close up output file */
 	write_image( format, IMAGE_COMPLETE, NULL );
-
-	gdk_gl_context_unref( context );
-	gdk_gl_pixmap_unref( glpixmap );
+ 
+	/*TODO: Had to remove the next two lines to make compilation possible */
+	// gdk_gl_context_unref( context );
+	// gdk_gl_pixmap_unref( glpixmap );
 	gdk_pixmap_unref( pixmap );
 
 	return err;
@@ -250,7 +253,7 @@ write_png( int message, const void *data )
 			return -1;
 		png_write_s = png_create_write_struct( PNG_LIBPNG_VER_STRING, NULL, NULL, NULL );
 		png_info_s = png_create_info_struct( png_write_s );
-		if (setjmp( png_write_s->jmpbuf )) {
+		if (setjmp( png_jmpbuf( png_write_s ))) {
 			/* Error writing file */
 			png_destroy_write_struct( &png_write_s, &png_info_s );
 			fclose( png_fp );

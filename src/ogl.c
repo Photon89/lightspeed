@@ -73,8 +73,6 @@ ogl_initialize( GtkWidget *ogl_w, void *nothing )
 		ogl_draw_string( NULL, INITIALIZE, NIL );
 
 	if (on_screen) {
-		GTKGL_TEMP_endgl( GTK_GL_AREA(ogl_w) );
-
 		/* Call ogl_resize( ) to finish viewport initialization */
 		ogl_resize( ogl_w, NULL, NULL );
 	}
@@ -103,7 +101,6 @@ ogl_resize( GtkWidget *ogl_w, GdkEventConfigure *ev_config, void *nothing )
 	height = ogl_w->allocation.height;
 	gtk_gl_area_make_current( GTK_GL_AREA(ogl_w) );
 	glViewport( 0, 0, width, height );
-	GTKGL_TEMP_endgl( GTK_GL_AREA(ogl_w) );
 
 	/* Update dimensions in camera struct */
 	i = assoc_cam_id( ogl_w );
@@ -291,8 +288,7 @@ ogl_draw( int cam_id )
 		info_display( INFODISP_DRAW, NIL );
 
 	if (drawing_to_screen) {
-		GTKGL_TEMP_endgl( GTK_GL_AREA(cam->ogl_w) );
-		gtk_gl_area_swapbuffers( GTK_GL_AREA(cam->ogl_w) );
+		gtk_gl_area_swap_buffers( GTK_GL_AREA(cam->ogl_w) );
 		profile( PROFILE_OGLDRAW_DONE );
 		cam->redraw = FALSE;
 	}
@@ -519,8 +515,7 @@ ogl_blank( int cam_id, const char *blank_message )
 		glEnable( GL_DEPTH_TEST );
 	}
 
-	GTKGL_TEMP_endgl( GTK_GL_AREA(cam->ogl_w) );
-	gtk_gl_area_swapbuffers( GTK_GL_AREA(cam->ogl_w) );
+	gtk_gl_area_swap_buffers( GTK_GL_AREA(cam->ogl_w) );
 }
 
 
