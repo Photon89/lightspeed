@@ -1450,6 +1450,7 @@ dialog_Help_Overview( GtkWidget *widget, int *message )
 void
 dialog_Help_Controls( GtkWidget *widget, int *message )
 {
+	GtkWidget *parent_window;
 	static int active = FALSE;
 	static GtkWidget *help_window_w;
 	GtkWidget *main_vbox_w;
@@ -1457,42 +1458,27 @@ dialog_Help_Controls( GtkWidget *widget, int *message )
 	GtkWidget *help_label_w;
 	GtkWidget *hbox_w;
 
-	switch (*message) {
-	case DIALOG_OPEN:
-		if (active)
-			return;
-		active = TRUE;
-		break;
-
-	case DIALOG_CLOSE:
-		if (!active)
-			return;
-		active = FALSE;
-		gtk_widget_destroy( help_window_w );
-		return;
-
-	default:
-#ifdef DEBUG
-		crash( "dialog_Help_Controls( ): invalid message" );
-#endif
-		return;
-	}
-
-	help_window_w = make_dialog_window( STR_DLG_Controls, dialog_Help_Controls );
+	parent_window = gtk_widget_get_toplevel( widget );
+	help_window_w = gtk_dialog_new_with_buttons(STR_DLG_Controls,
+                             GTK_WINDOW(parent_window),
+                             GTK_DIALOG_MODAL,
+                             GTK_STOCK_OK
+                             );
 	gtk_window_set_position( GTK_WINDOW(help_window_w), GTK_WIN_POS_CENTER );
-	main_vbox_w = add_vbox( help_window_w, FALSE, 10 );
+	main_vbox_w = gtk_vbox_new(TRUE, 5);
+	//frame_w =
 
-	frame_w = add_frame( main_vbox_w, NULL );
-	hbox_w = add_hbox( frame_w, FALSE, 10 );
-
-	help_label_w = add_label( hbox_w, STR_DLG_Controls_TEXT );
+	help_label_w = add_label( main_vbox_w, STR_DLG_Controls_TEXT );
 	gtk_label_set_justify( GTK_LABEL(help_label_w), GTK_JUSTIFY_LEFT );
 
-	/* OK button (hbox_w is to keep button from growing heightwise) */
-	hbox_w = add_hbox( main_vbox_w, FALSE, 0 );
-	add_button( hbox_w, STR_DLG_Okay_btn, dialog_Help_Controls, MESG_(DIALOG_CLOSE) );
-
 	gtk_widget_show( help_window_w );
+
+	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(help_window_w))), main_vbox_w);
+	gtk_widget_show_all (help_window_w);
+
+	gint result = gtk_dialog_run (GTK_DIALOG (help_window_w));
+	active = FALSE;
+	gtk_widget_hide (help_window_w);
 }
 
 
@@ -1506,22 +1492,25 @@ dialog_Help_About( GtkWidget *widget, int *message )
 	static GtkWidget *about_window_w;
 	GtkWidget *main_vbox_w;
 	GtkWidget *entry_w;
+	GtkWidget *text_label;
 	char info_str[256];
 
 	parent_window = gtk_widget_get_toplevel( widget );
 	about_window_w = gtk_dialog_new_with_buttons(STR_DLG_About,
                              GTK_WINDOW(parent_window),
-                             GTK_DIALOG_MODAL,
-                             GTK_STOCK_OK
+                             GTK_DIALOG_DESTROY_WITH_PARENT,
+                             GTK_STOCK_CLOSE
                              );
 
-	main_vbox_w = gtk_vbox_new(TRUE, 5);
+	main_vbox_w = gtk_vbox_new(TRUE, 0);
+	text_label = gtk_label_new(NULL);
 
 	/* Get the Light Speed! title up */
 	add_pixmap( main_vbox_w, about_window_w, lightspeed_title_xpm );
 
 	sprintf( info_str, STR_DLG_Version_x_y_ARG, VERSION );
-	add_label( main_vbox_w, info_str );
+	gtk_label_set_markup(GTK_LABEL(text_label), info_str);
+	gtk_box_pack_start(GTK_BOX(main_vbox_w), text_label, FALSE, FALSE, 0);
 	sprintf( info_str, STR_DLG_authorship_ARG, "Daniel Richard G." );
 	add_label( main_vbox_w, info_str );
 	sprintf( info_str, "skunk@mit.edu" );
@@ -1529,18 +1518,15 @@ dialog_Help_About( GtkWidget *widget, int *message )
 	sprintf( info_str, STR_copyright_ARG, 1999, "DRG" );
 	add_label( main_vbox_w, info_str );
 
-	/* To allow easy cut-and-paste :-) */
-	entry_w = gtk_entry_new( );
-	gtk_entry_set_editable( GTK_ENTRY(entry_w), FALSE );
-	sprintf( info_str, "XXX%sXXX", STR_DLG_home_page_url );
-	set_entry_width( entry_w, info_str );
-	set_entry_text( entry_w, STR_DLG_home_page_url );
-	gtk_box_pack_start( GTK_BOX(main_vbox_w), entry_w, FALSE, FALSE, 0 );
-	gtk_widget_show( entry_w );
+	/* Evaluate markup to get a clickable URL */
+	text_label = gtk_label_new(NULL);
+	sprintf( info_str, STR_DLG_home_page_url );
+	gtk_label_set_markup(GTK_LABEL(text_label), info_str);
+	gtk_box_pack_end(GTK_BOX(main_vbox_w), text_label, FALSE, FALSE, 0);
 
 	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(about_window_w))), main_vbox_w);
 	gtk_widget_show_all (about_window_w);
-	
+
 	gint result = gtk_dialog_run (GTK_DIALOG (about_window_w));
 	active = FALSE;
 	gtk_widget_hide (about_window_w);

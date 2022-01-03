@@ -207,10 +207,10 @@ const char *STR_DLG_Controls		= "Controls";
 /* About dialog */
 const char *STR_DLG_About		= "About";
 /* %d == version major, %d == version minor */
-const char *STR_DLG_Version_x_y_ARG	= "Version %s";
+const char *STR_DLG_Version_x_y_ARG	= "<b><span size='x-large'>Light Speed! %s</span></b>";
 /* %s == author's name */
 const char *STR_DLG_authorship_ARG	= "A Theory Toy by %s";
-const char *STR_DLG_home_page_url	= "http://lightspeed.sourceforge.net/";
+const char *STR_DLG_home_page_url	= "<a href='http://lightspeed.sourceforge.net/'>Website</a>";
 
 /* Spawned camera window title */
 const char *STR_DLG_Camera		= "Camera";
