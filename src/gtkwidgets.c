@@ -64,7 +64,7 @@ make_dialog_window( const char *title, void *callback_close )
 {
 	GtkWidget *dialog_window_w;
 
-	dialog_window_w = gtk_window_new( GDK_WINDOW_DIALOG );
+	dialog_window_w = gtk_window_new( GTK_WINDOW_TOPLEVEL );
 	gtk_window_set_title( GTK_WINDOW(dialog_window_w), title );
 	gtk_container_set_border_width( GTK_CONTAINER(dialog_window_w), 0 );
 	if (callback_close != NULL) {
