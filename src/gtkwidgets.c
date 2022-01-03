@@ -361,7 +361,7 @@ keybind( GtkWidget *widget, char *keys )
 		return;
 	}
 	if (GTK_IS_WINDOW(widget)) {
-		gtk_window_add_accel_group( accel_group, GTK_OBJECT(widget) );
+		gtk_window_add_accel_group( GTK_WINDOW(widget), accel_group );
 		return;
 	}
 
