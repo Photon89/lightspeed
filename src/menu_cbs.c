@@ -1501,52 +1501,33 @@ dialog_Help_Controls( GtkWidget *widget, int *message )
 void
 dialog_Help_About( GtkWidget *widget, int *message )
 {
+	GtkWidget *parent_window;
 	static int active = FALSE;
 	static GtkWidget *about_window_w;
 	GtkWidget *main_vbox_w;
-	GtkWidget *frame_w;
-	GtkWidget *vbox_w;
 	GtkWidget *entry_w;
 	char info_str[256];
 
-	switch (*message) {
-	case DIALOG_OPEN:
-		if (active)
-			return;
-		active = TRUE;
-		break;
+	parent_window = gtk_widget_get_toplevel( widget );
+	about_window_w = gtk_dialog_new_with_buttons(STR_DLG_About,
+                             GTK_WINDOW(parent_window),
+                             GTK_DIALOG_MODAL,
+                             GTK_STOCK_OK
+                             );
 
-	case DIALOG_CLOSE:
-		if (!active)
-			return;
-		active = FALSE;
-		gtk_widget_destroy( about_window_w );
-		return;
-
-	default:
-#ifdef DEBUG
-		crash( "dialog_Help_About( ): invalid message" );
-#endif
-		return;
-	}
-
-	about_window_w = make_dialog_window( STR_DLG_About, dialog_Help_About );
-	gtk_window_set_position( GTK_WINDOW(about_window_w), GTK_WIN_POS_CENTER );
-
-	main_vbox_w = add_vbox( about_window_w, FALSE, 10 );
-	frame_w = add_frame( main_vbox_w, NULL );
-	vbox_w = add_vbox( frame_w, FALSE, 15 );
+	main_vbox_w = gtk_vbox_new(TRUE, 5);
 
 	/* Get the Light Speed! title up */
-	add_pixmap( vbox_w, about_window_w, lightspeed_title_xpm );
+	add_pixmap( main_vbox_w, about_window_w, lightspeed_title_xpm );
 
 	sprintf( info_str, STR_DLG_Version_x_y_ARG, VERSION );
-	add_label( vbox_w, info_str );
+	add_label( main_vbox_w, info_str );
 	sprintf( info_str, STR_DLG_authorship_ARG, "Daniel Richard G." );
-	strcat( info_str, "\nskunk@mit.edu" );
-	add_label( vbox_w, info_str );
+	add_label( main_vbox_w, info_str );
+	sprintf( info_str, "skunk@mit.edu" );
+	add_label( main_vbox_w, info_str );
 	sprintf( info_str, STR_copyright_ARG, 1999, "DRG" );
-	add_label( vbox_w, info_str );
+	add_label( main_vbox_w, info_str );
 
 	/* To allow easy cut-and-paste :-) */
 	entry_w = gtk_entry_new( );
@@ -1554,12 +1535,15 @@ dialog_Help_About( GtkWidget *widget, int *message )
 	sprintf( info_str, "XXX%sXXX", STR_DLG_home_page_url );
 	set_entry_width( entry_w, info_str );
 	set_entry_text( entry_w, STR_DLG_home_page_url );
-	gtk_box_pack_start( GTK_BOX(vbox_w), entry_w, FALSE, FALSE, 0 );
+	gtk_box_pack_start( GTK_BOX(main_vbox_w), entry_w, FALSE, FALSE, 0 );
 	gtk_widget_show( entry_w );
 
-	add_button( main_vbox_w, STR_DLG_Okay_btn, dialog_Help_About, MESG_(DIALOG_CLOSE) );
-
-	gtk_widget_show( about_window_w );
+	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(about_window_w))), main_vbox_w);
+	gtk_widget_show_all (about_window_w);
+	
+	gint result = gtk_dialog_run (GTK_DIALOG (about_window_w));
+	active = FALSE;
+	gtk_widget_hide (about_window_w);
 }
 
 /* end menu_cbs.c */
