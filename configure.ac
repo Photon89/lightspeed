@@ -7,7 +7,7 @@ AC_CONFIG_SRCDIR([src/lightspeed.c])
 
 m4_define([lightspeed_major_version], [1])
 m4_define([lightspeed_minor_version], [2a])
-m4_define([lightspeed_version], [glib_major_version.glib_minor_version])
+m4_define([lightspeed_version], [lightspeed_major_version.lightspeed_minor_version])
 
 AC_INIT([lightspeed],[lightspeed_version])
 
