@@ -1399,37 +1399,26 @@ menu_Camera_Close( GtkWidget *widget_to_kill, void *dummy )
 void
 dialog_Help_Overview( GtkWidget *widget, int *message )
 {
+	GtkWidget *parent_window;
 	static int active = FALSE;
 	static GtkWidget *help_window_w;
+	GtkWidget *content_area;
 	GtkWidget *main_vbox_w;
 	GtkWidget *frame_w;
 	GtkWidget *help_label_w;
 	GtkWidget *hbox_w;
 
-	switch (*message) {
-	case DIALOG_OPEN:
-		if (active)
-			return;
-		active = TRUE;
-		break;
+	parent_window = gtk_widget_get_toplevel( widget );
+	help_window_w = gtk_dialog_new_with_buttons(STR_DLG_Overview,
+                             GTK_WINDOW(parent_window),
+                             GTK_DIALOG_MODAL,
+                             GTK_STOCK_CLOSE
+                             );
 
-	case DIALOG_CLOSE:
-		if (!active)
-			return;
-		active = FALSE;
-		gtk_widget_destroy( help_window_w );
-		return;
-
-	default:
-#ifdef DEBUG
-		crash( "dialog_Help_Overview( ): invalid message" );
-#endif
-		return;
-	}
-
-	help_window_w = make_dialog_window( STR_DLG_Overview, dialog_Help_Overview );
 	gtk_window_set_position( GTK_WINDOW(help_window_w), GTK_WIN_POS_CENTER );
-	main_vbox_w = add_vbox( help_window_w, FALSE, 10 );
+
+	content_area = gtk_dialog_get_content_area ( GTK_DIALOG(help_window_w) );
+	main_vbox_w = add_vbox( content_area, FALSE, 10 );
 
 	frame_w = add_frame( main_vbox_w, NULL );
 	hbox_w = add_hbox( frame_w, FALSE, 10 );
@@ -1437,11 +1426,11 @@ dialog_Help_Overview( GtkWidget *widget, int *message )
 	help_label_w = add_label( hbox_w, STR_DLG_Overview_TEXT );
 	gtk_label_set_justify( GTK_LABEL(help_label_w), GTK_JUSTIFY_LEFT );
 
-	/* OK button (hbox_w is to keep button from growing heightwise) */
-	hbox_w = add_hbox( main_vbox_w, FALSE, 0 );
-	add_button( hbox_w, STR_DLG_Okay_btn, dialog_Help_Overview, MESG_(DIALOG_CLOSE) );
+	gtk_widget_show_all( help_window_w );
 
-	gtk_widget_show( help_window_w );
+	gint result = gtk_dialog_run (GTK_DIALOG (help_window_w));
+	active = FALSE;
+	gtk_widget_hide (help_window_w);
 }
 
 
@@ -1453,6 +1442,7 @@ dialog_Help_Controls( GtkWidget *widget, int *message )
 	GtkWidget *parent_window;
 	static int active = FALSE;
 	static GtkWidget *help_window_w;
+	GtkWidget *content_area;
 	GtkWidget *main_vbox_w;
 	GtkWidget *frame_w;
 	GtkWidget *help_label_w;
@@ -1462,18 +1452,19 @@ dialog_Help_Controls( GtkWidget *widget, int *message )
 	help_window_w = gtk_dialog_new_with_buttons(STR_DLG_Controls,
                              GTK_WINDOW(parent_window),
                              GTK_DIALOG_MODAL,
-                             GTK_STOCK_OK
+                             GTK_STOCK_CLOSE
                              );
 	gtk_window_set_position( GTK_WINDOW(help_window_w), GTK_WIN_POS_CENTER );
-	main_vbox_w = gtk_vbox_new(TRUE, 5);
-	//frame_w =
 
-	help_label_w = add_label( main_vbox_w, STR_DLG_Controls_TEXT );
+	content_area = gtk_dialog_get_content_area ( GTK_DIALOG(help_window_w) );
+	main_vbox_w = add_vbox( content_area, FALSE, 10 );
+
+	frame_w = add_frame( main_vbox_w, NULL );
+	hbox_w = add_hbox( frame_w, FALSE, 10 );
+
+	help_label_w = add_label( hbox_w, STR_DLG_Controls_TEXT );
 	gtk_label_set_justify( GTK_LABEL(help_label_w), GTK_JUSTIFY_LEFT );
 
-	gtk_widget_show( help_window_w );
-
-	gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(help_window_w))), main_vbox_w);
 	gtk_widget_show_all (help_window_w);
 
 	gint result = gtk_dialog_run (GTK_DIALOG (help_window_w));
