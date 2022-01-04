@@ -31,7 +31,9 @@
 
 /* Allows exporting to the SRS (Special Relativity Scene) format used
  * by Antony Searle's BACKLIGHT relativistic raytracer */
-#define WITH_SRS_EXPORTER
+/* As it looks like the BACKLIGHT raytracer didn't make it into
+ * 2022, there is no point in having the SRS exporter...*/
+// #define WITH_SRS_EXPORTER
 
 
 /**** Completely arbitrary defaults **************************************/
