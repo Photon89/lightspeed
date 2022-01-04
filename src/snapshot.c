@@ -86,7 +86,9 @@ save_snapshot( int width, int height, const char *filename, int format )
 	err = !gdk_gl_pixmap_make_current( glpixmap, context );
 	if (err) {
 		message_window( STR_DLG_Error, STR_MSG_no_ogl_context );
-		/*TODO: Had to remove the next two lines to make compilation possible */
+		/*TODO: Had to use g_object_unref instead of gdk_gl_context_unref and gdk_gl_pixmap_unref to make compilation possible */
+		g_object_unref( context );
+		g_object_unref( glpixmap );
 		// gdk_gl_context_unref( context );
 		// gdk_gl_pixmap_unref( glpixmap );
 		gdk_pixmap_unref( pixmap );
@@ -180,8 +182,10 @@ save_snapshot( int width, int height, const char *filename, int format )
 
 	/* Close up output file */
 	write_image( format, IMAGE_COMPLETE, NULL );
- 
-	/*TODO: Had to remove the next two lines to make compilation possible */
+
+	/*TODO: Had to use g_object_unref instead of gdk_gl_context_unref and gdk_gl_pixmap_unref to make compilation possible */
+	g_object_unref( context );
+	g_object_unref( glpixmap );
 	// gdk_gl_context_unref( context );
 	// gdk_gl_pixmap_unref( glpixmap );
 	gdk_pixmap_unref( pixmap );
