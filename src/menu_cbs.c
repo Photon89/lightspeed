@@ -338,6 +338,8 @@ dialog_File_ImportObject( GtkWidget *widget, const int *message )
 
 	filesel_w = gtk_file_chooser_dialog_new( STR_DLG_Load_Object, GTK_WINDOW(parent_window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL );
 
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(filesel_w), "objects");
+
 	/* Create file type filters for the import dialog */
 	filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(filter, "*.3ds");
