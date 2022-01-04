@@ -26,10 +26,6 @@
 
 #include "lightspeed.h"
 
-/* Icon for the main Light Speed! window */
-#include "icon.xpm"
-
-
 /* Construct main window */
 void main_window( void )
 {
@@ -39,6 +35,7 @@ void main_window( void )
 	GtkWidget *menu_bar_w;
 	GtkWidget *menu_w;
 	GtkWidget *menu_item_w;
+	GdkPixbuf *window_icon_pixbuf;
 
 	/* Main window widget */
 	main_window_w = gtk_window_new( GTK_WINDOW_TOPLEVEL );
@@ -155,8 +152,10 @@ void main_window( void )
 	keybind( main_window_w, NULL );
 
 	/* Give window a nifty icon */
-	assign_icon( main_window_w, lightspeed_icon_xpm );
-
+	window_icon_pixbuf = gdk_pixbuf_new_from_resource ("/lightspeed/icon.png", NULL);
+	gtk_window_set_icon ( GTK_WINDOW(main_window_w), window_icon_pixbuf );
+	gtk_window_set_default_icon ( window_icon_pixbuf );
+	/* Also use the icon for all dialog windows */
 	gtk_widget_show( main_window_w );
 }
 

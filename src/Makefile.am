@@ -18,6 +18,7 @@ lightspeed_SOURCES = \
         geometry.c \
         globals.c \
         gtkwidgets.c \
+	  icon.c \
         importobjs.c \
         infodisp.c \
         lattice.c \
@@ -34,7 +35,6 @@ lightspeed_SOURCES = \
         warp.c
 
 EXTRA_DIST = \
-	icon.xpm \
 	title.xpm
 
 ## end src/Makefile.am
