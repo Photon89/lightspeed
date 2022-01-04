@@ -1510,7 +1510,7 @@ dialog_Help_About( GtkWidget *widget, int *message )
 
 	/* Evaluate markup to get a clickable URL */
 	text_label = gtk_label_new(NULL);
-	sprintf( info_str, STR_DLG_home_page_url );
+	sprintf( info_str, "%s", STR_DLG_home_page_url );
 	gtk_label_set_markup(GTK_LABEL(text_label), info_str);
 	gtk_box_pack_end(GTK_BOX(main_vbox_w), text_label, FALSE, FALSE, 0);
 
