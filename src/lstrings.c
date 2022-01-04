@@ -150,8 +150,9 @@ const char *STR_DLG_Smoothness		= "Smoothness";
 
 /* Load Object dialog */
 const char *STR_DLG_Load_Object		= "Load Object";
-const char *STR_DLG_Recognized_formats	= "Recognized formats";
-const char *STR_DLG_3d_formats		= "3D Studio: *.3DS or *.PRJ\nLightWave 3D: *.LWO";
+const char *STR_DLG_formats_all		= "All 3D object files";
+const char *STR_DLG_formats_3ds		= "3D Studio file(*.3ds)";
+const char *STR_DLG_formats_lwo		= "LightWave 3D file(*.lwo)";
 
 /* Save snapshot dialog */
 const char *STR_DLG_Save_Snapshot	= "Save Snapshot";

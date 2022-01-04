@@ -331,16 +331,35 @@ dialog_File_ImportObject( GtkWidget *widget, const int *message )
 	GtkWidget *label_w;
 	int i;
 	char *filename;
+	GtkWidget *parent_window;
+	GtkFileFilter *filter;
 
-	switch (*message) {
-	case DIALOG_OPEN:
-		if (active)
-			return;
-		active = TRUE;
-		break;
+	parent_window = gtk_widget_get_toplevel( widget );
 
-	case DIALOG_OK:
-		filename = gtk_file_selection_get_filename( GTK_FILE_SELECTION(filesel_w) );
+	filesel_w = gtk_file_chooser_dialog_new( STR_DLG_Load_Object, GTK_WINDOW(parent_window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL );
+
+	/* Create file type filters for the import dialog */
+	filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(filter, "*.3ds");
+	gtk_file_filter_add_pattern(filter, "*.lwo");
+	gtk_file_filter_set_name(filter, STR_DLG_formats_all);
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(filesel_w), filter);
+
+	filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(filter, "*.3ds");
+	gtk_file_filter_set_name(filter, STR_DLG_formats_3ds);
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(filesel_w), filter);
+
+	filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(filter, "*.lwo");
+	gtk_file_filter_set_name(filter, STR_DLG_formats_lwo);
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(filesel_w), filter);
+
+	gtk_widget_show( filesel_w );
+
+	if (gtk_dialog_run (GTK_DIALOG (filesel_w)) == GTK_RESPONSE_ACCEPT)
+	{
+		filename = gtk_file_chooser_get_filename( GTK_FILE_CHOOSER(filesel_w) );
 		if (prev_filename != NULL)
 			xfree( prev_filename );
 		prev_filename = xstrdup( filename );
@@ -365,30 +384,8 @@ dialog_File_ImportObject( GtkWidget *widget, const int *message )
 		profile( PROFILE_FRAMERATE_RESET );
 		dummy = 1.0;
 		transition( &dummy, FALSE, TRANS_LINEAR, 1.0, 0.0, -1 );
-		/* no break/return here */
-
-	case DIALOG_CLOSE:
-		if (!active)
-			return;
-		active = FALSE;
-		gtk_widget_destroy( filesel_w );
-		return;
-
-	default:
-#ifdef DEBUG
-		crash( "dialog_File_ImportObject( ): invalid message" );
-#endif
-		return;
 	}
-
-	filesel_w = make_filesel_window( STR_DLG_Load_Object, prev_filename, FALSE, dialog_File_ImportObject );
-
-	frame_w = add_frame( GTK_FILE_SELECTION(filesel_w)->main_vbox, STR_DLG_Recognized_formats );
-	hbox_w = add_hbox( frame_w, FALSE, 10 );
-	label_w = add_label( hbox_w, STR_DLG_3d_formats );
-	gtk_label_set_justify( GTK_LABEL(label_w), GTK_JUSTIFY_LEFT );
-
-	gtk_widget_show( filesel_w );
+	gtk_widget_destroy( filesel_w );
 }
 #endif /* WITH_OBJECT_IMPORTER */
 
