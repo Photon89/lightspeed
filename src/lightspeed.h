@@ -60,7 +60,9 @@
 /**** Constants/macros ***************************************************/
 
 /* We need >=1 image library to save snapshots */
-#if (HAVE_LIBPNG || HAVE_LIBTIFF)
+//#if (HAVE_LIBPNG || HAVE_LIBTIFF)
+/* Snapshot export crashes, so deactivate it completely for now */
+#if (FALSE)
 #define CAN_SAVE_SNAPSHOT
 #else
 #undef CAN_SAVE_SNAPSHOT
