@@ -40,20 +40,20 @@ void main_window( void )
 	/* Main window widget */
 	main_window_w = gtk_window_new( GTK_WINDOW_TOPLEVEL );
 	gtk_window_set_title( GTK_WINDOW(main_window_w), STR_Light_Speed );
-	gtk_widget_set_usize( main_window_w, 600, 450 );
+	gtk_widget_set_size_request( main_window_w, 600, 450 );
 	gtk_container_set_border_width( GTK_CONTAINER(main_window_w), 0 );
-	gtk_signal_connect( GTK_OBJECT(main_window_w), "focus_in_event",
-	                    GTK_SIGNAL_FUNC(camera_set_current), NULL );
+	g_signal_connect( G_OBJECT(main_window_w), "focus_in_event",
+	                    G_CALLBACK(camera_set_current), NULL );
 
 	/* Need to set this so assoc_cam_id( ) will work */
 	usr_cams[0]->window_w = main_window_w;
 	usr_cams[0]->ogl_w = NULL; /* for ogl_make_widget( ) */
 
 	/* (and its obligatory kill buttons) */
-	gtk_signal_connect( GTK_OBJECT(main_window_w), "delete_event",
-	                    GTK_SIGNAL_FUNC(gtk_main_quit), NULL );
+	g_signal_connect( G_OBJECT(main_window_w), "delete_event",
+	                    G_CALLBACK(gtk_main_quit), NULL );
 	/* Destroy window before exiting */
-	gtk_quit_add_destroy( 1, GTK_OBJECT(main_window_w) );
+	gtk_quit_add_destroy( 1, G_OBJECT(main_window_w) );
 
 	/* Main vertical box widget */
 	main_vbox_w = add_vbox( main_window_w, FALSE, 0 );
@@ -133,7 +133,7 @@ void main_window( void )
 	velocity_input( hbox_w, MESG_(INITIALIZE) );
 
 	/* Horizontal box for viewport and velocity slider */
-	hbox_w = gtk_hbox_new( FALSE, 0 );
+	hbox_w = gtk_box_new( GTK_ORIENTATION_HORIZONTAL, 0 );
 	gtk_box_pack_start( GTK_BOX(main_vbox_w), hbox_w, TRUE, TRUE, 0 );
 	gtk_widget_show( hbox_w );
 
@@ -187,8 +187,8 @@ void add_Camera_menu( GtkWidget *menu_bar_w, GtkWidget *window_w )
 	}
 	add_separator( submenu_w );
 	menu_item_w = add_radio_menu_item( submenu_w, STR_MNU_Custom, dialog_Camera_Lens_Custom, MESG_(DIALOG_OPEN) );
-	gtk_signal_connect( GTK_OBJECT(menu_item_w), "activate",
-	                    GTK_SIGNAL_FUNC(dialog_Camera_Lens_Custom), MESG_(DIALOG_OPEN) );
+	g_signal_connect( G_OBJECT(menu_item_w), "activate",
+	                    G_CALLBACK(dialog_Camera_Lens_Custom), MESG_(DIALOG_OPEN) );
 	/* Lens submenu finished */
 	if (advanced_interface)
 		add_menu_item( menu_w, STR_MNU_Position, dialog_Camera_Position, MESG_(DIALOG_OPEN) );
@@ -230,9 +230,9 @@ void add_Camera_menu( GtkWidget *menu_bar_w, GtkWidget *window_w )
 	}
 	else {
 		/* For spawned cameras */
-		menu_item_w = add_menu_item( menu_w, STR_MNU_Close, NULL, GTK_OBJECT(window_w) );
-		gtk_signal_connect_object( GTK_OBJECT(menu_item_w), "activate",
-		                           GTK_SIGNAL_FUNC(menu_Camera_Close), GTK_OBJECT(window_w) );
+		menu_item_w = add_menu_item( menu_w, STR_MNU_Close, NULL, G_OBJECT(window_w) );
+		gtk_signal_connect_object( G_OBJECT(menu_item_w), "activate",
+		                           G_CALLBACK(menu_Camera_Close), G_OBJECT(window_w) );
 		keybind( menu_item_w, "^X" );
 	}
 }

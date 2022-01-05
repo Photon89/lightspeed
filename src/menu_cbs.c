@@ -116,7 +116,7 @@ velocity_input( GtkWidget *widget, const int *message )
 		init_str = velocity_string( velocity, FALSE );
 		velocity_entry_w = add_entry( widget, init_str, velocity_input, MESG_(VALUE_COMMITTED) );
 		set_entry_width( velocity_entry_w, "000,000,000,000" );
-		gtk_signal_connect( GTK_OBJECT(velocity_entry_w), "changed", GTK_SIGNAL_FUNC(velocity_input), MESG_(VALUE_CHANGED) );
+		g_signal_connect( G_OBJECT(velocity_entry_w), "changed", G_CALLBACK(velocity_input), MESG_(VALUE_CHANGED) );
 		keybind( velocity_entry_w, "^V" );
 		vbox_w = add_vbox( widget, FALSE, 3 );
 		button_w = add_button( vbox_w, NULL, velocity_input, MESG_(UNITS_CHANGED) );
@@ -138,7 +138,7 @@ velocity_input( GtkWidget *widget, const int *message )
 void
 velocity_slider( GtkWidget *widget, const int *message )
 {
-	static GtkObject *velocity_adj;
+	static GtkAdjustment *velocity_adj;
 	static GtkWidget *velocity_vscale_w;
 	static int blocking_changed = FALSE;
 	GtkWidget *frame_w;
@@ -149,7 +149,7 @@ velocity_slider( GtkWidget *widget, const int *message )
 	case VALUE_CHANGED:
 		if (blocking_changed)
 			return;
-		adj_value = GTK_ADJUSTMENT(velocity_adj)->value;
+		adj_value = gtk_adjustment_get_value( GTK_ADJUSTMENT(velocity_adj) );
 		input_val = C * (1.0 - adj_value / 65536.0);
 		/* Halt any ongoing velocity transition */
 		break_transition( &velocity );
@@ -163,7 +163,7 @@ velocity_slider( GtkWidget *widget, const int *message )
 		/* Update slider if its value isn't up-to-date */
 		blocking_changed = TRUE;
 		adj_value = rint( 65536.0 * (1.0 - velocity / C) );
-		if (GTK_ADJUSTMENT(velocity_adj)->value != adj_value)
+		if (gtk_adjustment_get_value( GTK_ADJUSTMENT(velocity_adj) ) != adj_value)
 			gtk_adjustment_set_value( GTK_ADJUSTMENT(velocity_adj), adj_value );
 		blocking_changed = FALSE;
 		return;
@@ -173,8 +173,8 @@ velocity_slider( GtkWidget *widget, const int *message )
 		frame_w = add_frame( widget, NULL );
 		/* Velocity adjustment and scale widget */
 		velocity_adj = gtk_adjustment_new( 65536.0, 0.0, 65536.0, 1.0, 2048.0, 0.0 );
-		gtk_signal_connect( GTK_OBJECT(velocity_adj), "value_changed", GTK_SIGNAL_FUNC(velocity_slider), MESG_(VALUE_CHANGED) );
-		velocity_vscale_w = gtk_vscale_new( GTK_ADJUSTMENT(velocity_adj) );
+		g_signal_connect( G_OBJECT(velocity_adj), "value_changed", G_CALLBACK(velocity_slider), MESG_(VALUE_CHANGED) );
+		velocity_vscale_w = gtk_scale_new( GTK_ORIENTATION_VERTICAL, GTK_ADJUSTMENT(velocity_adj) );
 		gtk_scale_set_draw_value( GTK_SCALE(velocity_vscale_w), FALSE );
 		/* gtk_box_pack_start( GTK_BOX(hbox_w), velocity_scale_w, FALSE, FALSE, 0 ); */
 		gtk_container_add( GTK_CONTAINER(frame_w), velocity_vscale_w );
@@ -197,8 +197,8 @@ dialog_File_NewLattice( GtkWidget *widget, const int *message )
 {
 	static int active = FALSE;
 	static GtkWidget *dialog_window_w;
-	static GtkObject *size_x_adj, *size_y_adj, *size_z_adj;
-	static GtkObject *smoothness_adj;
+	static GtkAdjustment *size_x_adj, *size_y_adj, *size_z_adj;
+	static GtkAdjustment *smoothness_adj;
 	static int prev_smoothness = DEF_LATTICE_SMOOTH;
 	static float dummy;
 	GtkWidget *main_vbox_w;
@@ -219,11 +219,11 @@ dialog_File_NewLattice( GtkWidget *widget, const int *message )
 	case DIALOG_OK:
 		gtk_widget_hide( dialog_window_w );
 /* TODO: Find out why window widget doesn't actually hide until too late */
-		input_size_x = (int)(GTK_ADJUSTMENT(size_x_adj)->value);
-		input_size_y = (int)(GTK_ADJUSTMENT(size_y_adj)->value);
-		input_size_z = (int)(GTK_ADJUSTMENT(size_z_adj)->value);
+		input_size_x = (int)(gtk_adjustment_get_value( GTK_ADJUSTMENT(size_x_adj) ));
+		input_size_y = (int)(gtk_adjustment_get_value( GTK_ADJUSTMENT(size_y_adj) ));
+		input_size_z = (int)(gtk_adjustment_get_value( GTK_ADJUSTMENT(size_z_adj) ));
 		if (advanced_interface)
-			input_smoothness = (int)(GTK_ADJUSTMENT(smoothness_adj)->value);
+			input_smoothness = (int)(gtk_adjustment_get_value( smoothness_adj ));
 		else
 			input_smoothness = prev_smoothness;
 		/* Redraw or blank the viewports first (do redraw(s) if it
@@ -286,19 +286,19 @@ dialog_File_NewLattice( GtkWidget *widget, const int *message )
 	vbox_w = add_vbox( hbox_w, FALSE, 0 );
 	add_label( vbox_w, "X" );
 	size_x_adj = gtk_adjustment_new( (float)lattice_size_x, 1.0, 16.0, 1.0, 1.0, 0.0 );
-	add_spin_button( vbox_w, size_x_adj );
+	add_spin_button( vbox_w, G_OBJECT(size_x_adj) );
 
 	/* Y spinbutton */
 	vbox_w = add_vbox( hbox_w, FALSE, 0 );
 	add_label( vbox_w, "Y" );
 	size_y_adj = gtk_adjustment_new( (float)lattice_size_y, 1.0, 16.0, 1.0, 1.0, 0.0 );
-	add_spin_button( vbox_w, size_y_adj );
+	add_spin_button( vbox_w, G_OBJECT(size_y_adj) );
 
 	/* Z spinbutton */
 	vbox_w = add_vbox( hbox_w, FALSE, 0 );
 	add_label( vbox_w, "Z" );
 	size_z_adj = gtk_adjustment_new( (float)lattice_size_z, 1.0, 16.0, 1.0, 1.0, 0.0 );
-	add_spin_button( vbox_w, size_z_adj );
+	add_spin_button( vbox_w, G_OBJECT(size_z_adj) );
 
 	if (advanced_interface) {
 		/* Smoothness title frame */
@@ -307,7 +307,7 @@ dialog_File_NewLattice( GtkWidget *widget, const int *message )
 
 		/* Smoothness slider */
 		smoothness_adj = gtk_adjustment_new( (float)prev_smoothness, 3.0, 16.0, 1.0, 1.0, 0.0 );
-		add_hscale( hbox_w, smoothness_adj );
+		add_hscale( hbox_w, G_OBJECT(smoothness_adj) );
 	}
 
 	hbox_w = add_hbox( main_vbox_w, TRUE, 0 );
@@ -516,7 +516,7 @@ dialog_File_SaveSnapshot( GtkWidget *widget, const int *message )
 	hbox_w = add_hbox( frame_w, FALSE, 10 );
 
 	// Snapshot size label & entry
-	vbox_w = gtk_vbox_new( FALSE, 0 );
+	vbox_w = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
 	gtk_box_pack_start( GTK_BOX(hbox_w), vbox_w, TRUE, FALSE, 0 );
 	gtk_widget_show( vbox_w );
 	add_label( vbox_w, STR_DLG_snapshot_Size );
@@ -525,7 +525,7 @@ dialog_File_SaveSnapshot( GtkWidget *widget, const int *message )
 
 	// Image format option menu
 	/* This should use some builtin stuff like filters */	
-	//vbox_w = gtk_vbox_new( FALSE, 0 );
+	//vbox_w = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
 	//gtk_box_pack_start( GTK_BOX(hbox_w), vbox_w, TRUE, FALSE, 0 );
 	//gtk_widget_show( vbox_w );
 	//add_label( vbox_w, STR_DLG_snapshot_Format );
@@ -679,7 +679,7 @@ dialog_File_ExportSRS( GtkWidget *widget, const int *message )
 	hbox_w = add_hbox( frame_w, FALSE, 10 );
 
 	/* Rendering size label & entry */
-	vbox_w = gtk_vbox_new( FALSE, 0 );
+	vbox_w = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
 	gtk_box_pack_start( GTK_BOX(hbox_w), vbox_w, TRUE, FALSE, 0 );
 	gtk_widget_show( vbox_w );
 	add_label( vbox_w, STR_DLG_srs_Size );
@@ -687,7 +687,7 @@ dialog_File_ExportSRS( GtkWidget *widget, const int *message )
 	size_entry_w = add_entry( vbox_w, init_str, NULL, NULL );
 
 	/* Misc. parameter check buttons */
-	vbox_w = gtk_vbox_new( FALSE, 0 );
+	vbox_w = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
 	gtk_box_pack_start( GTK_BOX(hbox_w), vbox_w, TRUE, FALSE, 0 );
 	gtk_widget_show( vbox_w );
 	stereo_chkbtn_w = add_check_button( vbox_w, STR_DLG_srs_Stereo_view, stereo_view, NULL, NULL );
@@ -705,7 +705,7 @@ menu_Objects_toggles( GtkWidget *widget, const int *message )
 {
 	int flag;
 
-	flag = GTK_CHECK_MENU_ITEM(widget)->active;
+	flag = gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(widget) );
 	auxiliary_objects( *message, flag );
 }
 
@@ -718,7 +718,7 @@ dialog_Objects_Animation( GtkWidget *widget, const int *message )
 	static GtkWidget *x0_entry_w;
 	static GtkWidget *x1_entry_w;
 	static GtkWidget *action_label_w;
-	static GtkObject *loop_time_adj;
+	static GtkAdjustment *loop_time_adj;
 	static float prev_recomm_x0 = 999.0;
 	static float prev_recomm_x1 = -999.0;
 	static float prev_x0;
@@ -768,7 +768,7 @@ dialog_Objects_Animation( GtkWidget *widget, const int *message )
 				input_x0 = prev_x0;
 				input_x1 = prev_x1;
 			}
-			input_loop_time = GTK_ADJUSTMENT(loop_time_adj)->value;
+			input_loop_time = gtk_adjustment_get_value( loop_time_adj );
 			if (input_x0 > input_x1)
 				return;
 			if ((input_x1 - input_x0) < 0.5)
@@ -838,14 +838,14 @@ dialog_Objects_Animation( GtkWidget *widget, const int *message )
 		hbox_w = add_hbox( frame_w, FALSE, 10 );
 	}
 
-	hbox2_w = gtk_hbox_new( FALSE, 0 );
+	hbox2_w = gtk_box_new( GTK_ORIENTATION_HORIZONTAL, 0 );
 	gtk_box_pack_start( GTK_BOX(hbox_w), hbox2_w, TRUE, FALSE, 0 );
 	gtk_widget_show( hbox2_w );
 
 	/* Loop time spin button */
 	add_label( hbox2_w, STR_DLG_Loop_time );
 	loop_time_adj = gtk_adjustment_new( prev_loop_time, 1, 60, 1, 1, 0.0 );
-	add_spin_button( hbox2_w, loop_time_adj );
+	add_spin_button( hbox2_w, G_OBJECT(loop_time_adj) );
 	add_label( hbox2_w, STR_DLG_seconds );
 
 	/* Begin/Stop and Close buttons */
@@ -863,7 +863,7 @@ dialog_Objects_Animation( GtkWidget *widget, const int *message )
 void
 menu_Warp_toggles( GtkWidget *widget, const int *message )
 {
-	if (GTK_CHECK_MENU_ITEM(widget)->active)
+	if (gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(widget) ))
 		warp( *message, MESG_(1) );
 	else
 		warp( *message, MESG_(0) );
@@ -877,7 +877,7 @@ menu_Camera_Lens_select( GtkWidget *widget, const float *new_lens_length )
 	float new_fov;
 
 	new_fov = camera_calc_fov( *new_lens_length );
-	if (GTK_CHECK_MENU_ITEM(widget)->active)
+	if (gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(widget) ))
 		transition( &usr_cams[cur_cam]->fov, FALSE, TRANS_QTR_SIN, 3.0, new_fov, cur_cam );
 }
 
@@ -904,7 +904,7 @@ dialog_Camera_Lens_Custom( GtkWidget *widget, const int *message )
 
 	switch (*message) {
 	case DIALOG_OPEN:
-		if (active || !GTK_CHECK_MENU_ITEM(widget)->active)
+		if (active || !gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(widget) ))
 			return;
 		active = TRUE;
 		break;
@@ -1219,22 +1219,22 @@ cam_pos_close:
 	add_label( vbox_w, "X" );
 	loc_x_entry_w = add_entry( vbox_w, "---", NULL, NULL );
 	set_entry_width( loc_x_entry_w, xyz_span_str );
-	gtk_signal_connect( GTK_OBJECT(loc_x_entry_w), "changed",
-	                    GTK_SIGNAL_FUNC(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
+	g_signal_connect( G_OBJECT(loc_x_entry_w), "changed",
+	                    G_CALLBACK(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
 
 	vbox_w = add_vbox( hbox_w, FALSE, 0 );
 	add_label( vbox_w, "Y" );
 	loc_y_entry_w = add_entry( vbox_w, "---", NULL, NULL );
 	set_entry_width( loc_y_entry_w, xyz_span_str );
-	gtk_signal_connect( GTK_OBJECT(loc_y_entry_w), "changed",
-	                    GTK_SIGNAL_FUNC(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
+	g_signal_connect( G_OBJECT(loc_y_entry_w), "changed",
+	                    G_CALLBACK(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
 
 	vbox_w = add_vbox( hbox_w, FALSE, 0 );
 	add_label( vbox_w, "Z" );
 	loc_z_entry_w = add_entry( vbox_w, "---", NULL, NULL );
 	set_entry_width( loc_z_entry_w, xyz_span_str );
-	gtk_signal_connect( GTK_OBJECT(loc_z_entry_w), "changed",
-	                    GTK_SIGNAL_FUNC(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
+	g_signal_connect( G_OBJECT(loc_z_entry_w), "changed",
+	                    G_CALLBACK(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
 
 	/* Title frame for target entries */
 	targ_frame_w = add_frame( main_vbox_w, "---" );
@@ -1248,31 +1248,31 @@ cam_pos_close:
 	/* The XYZ-target/phi+theta-heading entries */
 
 	/* X or phi */
-	vbox2_w = gtk_vbox_new( FALSE, 0 );
+	vbox2_w = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
 	gtk_box_pack_start( GTK_BOX(hbox_w), vbox2_w, TRUE, FALSE, 0 );
 	gtk_widget_show( vbox2_w );
 	targ_1_label_w = add_label( vbox2_w, "---" );
 	targ_1_entry_w = add_entry( vbox2_w, "---", NULL, NULL );
-	gtk_signal_connect( GTK_OBJECT(targ_1_entry_w), "changed",
-	                    GTK_SIGNAL_FUNC(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
+	g_signal_connect( G_OBJECT(targ_1_entry_w), "changed",
+	                    G_CALLBACK(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
 
 	/* Y or theta */
-	vbox2_w = gtk_vbox_new( FALSE, 0 );
+	vbox2_w = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
 	gtk_box_pack_start( GTK_BOX(hbox_w), vbox2_w, TRUE, FALSE, 0 );
 	gtk_widget_show( vbox2_w );
 	targ_2_label_w = add_label( vbox2_w, "---" );
 	targ_2_entry_w = add_entry( vbox2_w, "---", NULL, NULL );
-	gtk_signal_connect( GTK_OBJECT(targ_2_entry_w), "changed",
-	                    GTK_SIGNAL_FUNC(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
+	g_signal_connect( G_OBJECT(targ_2_entry_w), "changed",
+	                    G_CALLBACK(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
 
 	/* Z */
-	targ_z_vbox_w = gtk_vbox_new( FALSE, 0 );
+	targ_z_vbox_w = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
 	gtk_box_pack_start( GTK_BOX(hbox_w), targ_z_vbox_w, TRUE, FALSE, 0 );
 	gtk_widget_show( targ_z_vbox_w );
 	add_label( targ_z_vbox_w, "Z" );
 	targ_z_entry_w = add_entry( targ_z_vbox_w, "---", NULL, NULL );
-	gtk_signal_connect( GTK_OBJECT(targ_z_entry_w), "changed",
-	                    GTK_SIGNAL_FUNC(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
+	g_signal_connect( G_OBJECT(targ_z_entry_w), "changed",
+	                    G_CALLBACK(dialog_Camera_Position), MESG_(VALUE_CHANGED) );
 
 	/* Entry mode button */
 	button_w = add_button( vbox_w, NULL, dialog_Camera_Position, MESG_(UNITS_CHANGED) );
@@ -1306,7 +1306,7 @@ menu_Camera_InfoDisplay_toggles( GtkWidget *widget, const int *message )
 {
 	int flag;
 
-	flag = GTK_CHECK_MENU_ITEM(widget)->active;
+	flag = gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(widget) );
 	info_display( *message, flag );
 }
 
@@ -1317,7 +1317,7 @@ menu_Camera_Background_select( GtkWidget *widget, const int *color_id )
 {
 	float new_r, new_g, new_b;
 
-	if (!GTK_CHECK_MENU_ITEM(widget)->active)
+	if (!gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(widget) ))
 		return;
 
 #ifdef DEBUG
@@ -1343,7 +1343,7 @@ menu_Camera_GraphicsMode_select( GtkWidget *widget, const int *message )
 	int i;
 
 	/* "toggled" signal also catches "toggle off" */
-	if (!GTK_CHECK_MENU_ITEM(widget)->active)
+	if (!gtk_check_menu_item_get_active( GTK_CHECK_MENU_ITEM(widget) ))
 		return;
 
 	for (i = 0; i < num_cams; i++) {
@@ -1387,17 +1387,17 @@ menu_Camera_Spawn( GtkWidget *widget, void *dummy )
 	/* New window widget */
 	cam_window_w = gtk_window_new( GTK_WINDOW_TOPLEVEL );
 	gtk_window_set_title( GTK_WINDOW(cam_window_w), STR_DLG_Camera );
-	gtk_widget_set_usize( cam_window_w, 400, 300 );
+	gtk_widget_set_size_request( cam_window_w, 400, 300 );
 	gtk_container_set_border_width( GTK_CONTAINER(cam_window_w), 0 );
-	gtk_signal_connect( GTK_OBJECT(cam_window_w), "focus_in_event",
-	                    GTK_SIGNAL_FUNC(camera_set_current), NULL );
-	gtk_signal_connect( GTK_OBJECT(cam_window_w), "delete_event",
-	                    GTK_SIGNAL_FUNC(menu_Camera_Close), NULL );
+	g_signal_connect( G_OBJECT(cam_window_w), "focus_in_event",
+	                    G_CALLBACK(camera_set_current), NULL );
+	g_signal_connect( G_OBJECT(cam_window_w), "delete_event",
+	                    G_CALLBACK(menu_Camera_Close), NULL );
 	/* Destroy window before exiting */
-	gtk_quit_add_destroy( 1, GTK_OBJECT(cam_window_w) );
+	gtk_quit_add_destroy( 1, G_OBJECT(cam_window_w) );
 
 	/* Main vertical box widget */
-	main_vbox_w = gtk_vbox_new( FALSE, 0 );
+	main_vbox_w = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
 	gtk_container_set_border_width( GTK_CONTAINER(main_vbox_w), 0 );
 	gtk_container_add( GTK_CONTAINER(cam_window_w), main_vbox_w );
 	gtk_widget_show( main_vbox_w );
@@ -1537,7 +1537,7 @@ dialog_Help_About( GtkWidget *widget, int *message )
                              GTK_STOCK_CLOSE
                              );
 
-	main_vbox_w = gtk_vbox_new(TRUE, 0);
+	main_vbox_w = gtk_box_new( GTK_ORIENTATION_HORIZONTAL, 0);
 	text_label = gtk_label_new(NULL);
 
 	/* Get the Light Speed! title up */
