@@ -130,19 +130,22 @@ main( int argc, char **argv )
 	gtk_init( &argc, &argv );
 
 	/* Check for OpenGL support (GLX extension) */
+	/* TODO: The check is temporarily deactivated as gdk_gl_query does not exist in GTK3 */
+	/*
 	if (gdk_gl_query( ) == FALSE) {
 		fprintf( stderr, "Light Speed! requires OpenGL support to run." );
 		fflush( stderr );
 		return -1;
 	}
-
+	*/
+	
 	/* Generate/load initial object */
 	if (init_obj_file == NULL)
 		make_lattice( DEF_LATTICE_X, DEF_LATTICE_Y, DEF_LATTICE_Z, DEF_LATTICE_SMOOTH );
 	else {
 		i = import_objects( init_obj_file );
 		if (i < 0) {
-			gtk_timeout_add( 5000, (GtkFunction)gtk_main_quit, NULL );
+			g_timeout_add( 5000, (GSourceFunc)gtk_main_quit, NULL );
 			gtk_main( );
 			return -1;
 		}

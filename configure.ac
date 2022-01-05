@@ -39,7 +39,7 @@ AC_CHECK_FUNCS(getopt_long gettimeofday strcspn strdup strtod)
 
 # Checks for GTK+ libraries.
 #
-AM_PATH_GTK_2_0(2.0.1, , AC_MSG_ERROR([Cannot find proper GTK+ version]))
+PKG_CHECK_MODULES([GTK], [gtk+-3.0])
 
 #
 # Check for OpenGL libraries

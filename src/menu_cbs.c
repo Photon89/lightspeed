@@ -409,7 +409,12 @@ dialog_File_SaveSnapshot( GtkWidget *widget, const int *message )
 	char *filename;
 	char *input_str;
 	char init_str[256];
+	GtkWidget *parent_window;
 
+	parent_window = gtk_widget_get_toplevel( widget );
+
+	filesel_w = gtk_file_chooser_dialog_new( STR_DLG_Save_Snapshot, GTK_WINDOW(parent_window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL );
+/*
 	switch (*message) {
 	case DIALOG_OPEN:
 		if (active)
@@ -418,14 +423,14 @@ dialog_File_SaveSnapshot( GtkWidget *widget, const int *message )
 		break;
 
 	case DIALOG_OK:
-		/* Grab and save the specified filename */
+		// Grab and save the specified filename 
 		filename = gtk_file_selection_get_filename( GTK_FILE_SELECTION(filesel_w) );
 		xfree( prev_filename );
 		prev_filename = xstrdup( filename );
-		/* Get snapshot dimensions */
+		// Get snapshot dimensions 
 		input_str = read_entry( size_entry_w );
 		width = (int)strtod( input_str, NULL );
-		/* next part (height) */
+		// next part (height) 
 		input_str = strpbrk( input_str, "xX* " );
 		if (input_str != NULL)
 			input_str = strpbrk( input_str, "0123456789" );
@@ -434,7 +439,7 @@ dialog_File_SaveSnapshot( GtkWidget *widget, const int *message )
 		else
 			height = (3 * width) / 4;
 		if ((width < 100) || (height < 75)) {
-			/* Dimensions are too small (or negative??) */
+			// Dimensions are too small (or negative??)
 			width = MAX(100, width);
 			height = MAX(75, height);
 			sprintf( init_str, "%d x %d", width, height );
@@ -454,7 +459,7 @@ dialog_File_SaveSnapshot( GtkWidget *widget, const int *message )
 			save_snapshot( width, height, prev_filename, format );
 			ogl_draw( 0 );
 		}
-		/* no break/return here */
+		// no break/return here 
 
 	case DIALOG_CLOSE:
 		if (!active)
@@ -465,8 +470,8 @@ dialog_File_SaveSnapshot( GtkWidget *widget, const int *message )
 
 	case IMAGE_FORMAT_PNG:
 	case IMAGE_FORMAT_TIFF:
-		/* Note newly selected format and update filename extension
-		 * (the latter only if it matches previously selected format) */
+		// Note newly selected format and update filename extension
+		    // (the latter only if it matches previously selected format)
 		f1 = format - IMAGE_FORMAT - 1;
 		format = *message;
 		f2 = format - IMAGE_FORMAT - 1;
@@ -481,7 +486,7 @@ dialog_File_SaveSnapshot( GtkWidget *widget, const int *message )
 #endif
 		return;
 	}
-
+*/
 #ifdef HAVE_LIBPNG
 	if (format == -1)
 		format = IMAGE_FORMAT_PNG;
@@ -498,15 +503,19 @@ dialog_File_SaveSnapshot( GtkWidget *widget, const int *message )
 		sprintf( init_str, "%s%s", STR_DLG_snapshot_basename, image_format_exts[f] );
 		prev_filename = xstrdup( init_str );
 	}
-	filesel_w = make_filesel_window( STR_DLG_Save_Snapshot, prev_filename, TRUE, dialog_File_SaveSnapshot );
 
-	/* Frame for image parameters */
-	frame_w = add_frame( GTK_FILE_SELECTION(filesel_w)->main_vbox, STR_DLG_snapshot_Parameters );
+	gtk_file_chooser_set_filename( GTK_FILE_CHOOSER(filesel_w), prev_filename );
 
-	/* hbox for image size/format inputs */
+	// filesel_w = make_filesel_window( STR_DLG_Save_Snapshot, prev_filename, TRUE, dialog_File_SaveSnapshot );
+
+	// Frame for image parameters
+	//frame_w = add_frame( GTK_FILE_CHOOSER_DIALOG(filesel_w), STR_DLG_snapshot_Parameters );
+	frame_w = gtk_frame_new(NULL);
+	gtk_file_chooser_set_extra_widget( GTK_FILE_CHOOSER(filesel_w), frame_w );
+	// hbox for image size/format inputs
 	hbox_w = add_hbox( frame_w, FALSE, 10 );
 
-	/* Snapshot size label & entry */
+	// Snapshot size label & entry
 	vbox_w = gtk_vbox_new( FALSE, 0 );
 	gtk_box_pack_start( GTK_BOX(hbox_w), vbox_w, TRUE, FALSE, 0 );
 	gtk_widget_show( vbox_w );
@@ -514,20 +523,56 @@ dialog_File_SaveSnapshot( GtkWidget *widget, const int *message )
 	sprintf( init_str, "%d x %d", width, height );
 	size_entry_w = add_entry( vbox_w, init_str, NULL, NULL );
 
-	/* Image format option menu */
-	vbox_w = gtk_vbox_new( FALSE, 0 );
-	gtk_box_pack_start( GTK_BOX(hbox_w), vbox_w, TRUE, FALSE, 0 );
-	gtk_widget_show( vbox_w );
-	add_label( vbox_w, STR_DLG_snapshot_Format );
+	// Image format option menu
+	/* This should use some builtin stuff like filters */	
+	//vbox_w = gtk_vbox_new( FALSE, 0 );
+	//gtk_box_pack_start( GTK_BOX(hbox_w), vbox_w, TRUE, FALSE, 0 );
+	//gtk_widget_show( vbox_w );
+	//add_label( vbox_w, STR_DLG_snapshot_Format );
 #ifdef HAVE_LIBPNG
-	option_menu_item( "PNG", dialog_File_SaveSnapshot, MESG_(IMAGE_FORMAT_PNG) );
+	//option_menu_item( "PNG", dialog_File_SaveSnapshot, MESG_(IMAGE_FORMAT_PNG) );
 #endif
 #ifdef HAVE_LIBTIFF
-	option_menu_item( "TIFF", dialog_File_SaveSnapshot, MESG_(IMAGE_FORMAT_TIFF) );
+	//option_menu_item( "TIFF", dialog_File_SaveSnapshot, MESG_(IMAGE_FORMAT_TIFF) );
 #endif
-	add_option_menu( vbox_w );
+	//add_option_menu( vbox_w );
 
 	gtk_widget_show( filesel_w );
+	
+	
+	
+	
+	if (gtk_dialog_run (GTK_DIALOG (filesel_w)) == GTK_RESPONSE_ACCEPT)
+  {
+		// Grab and save the specified filename 
+		filename = gtk_file_chooser_get_filename( GTK_FILE_CHOOSER(filesel_w) );
+		xfree( prev_filename );
+		prev_filename = xstrdup( filename );
+		// Get snapshot dimensions 
+		input_str = read_entry( size_entry_w );
+		width = (int)strtod( input_str, NULL );
+		// next part (height) 
+		input_str = strpbrk( input_str, "xX* " );
+		if (input_str != NULL)
+			input_str = strpbrk( input_str, "0123456789" );
+		if (input_str != NULL)
+			height = (int)strtod( input_str, NULL );
+		else
+			height = (3 * width) / 4;
+		if ((width < 100) || (height < 75)) {
+			// Dimensions are too small (or negative??)
+			width = MAX(100, width);
+			height = MAX(75, height);
+			sprintf( init_str, "%d x %d", width, height );
+			set_entry_text( size_entry_w, init_str );
+			return;
+		}
+		//ogl_blank( 0, NULL );
+		save_snapshot( width, height, prev_filename, format );
+		//ogl_draw( 0 );
+  }
+		gtk_widget_destroy( filesel_w );
+
 }
 #endif /* CAN_SAVE_SNAPSHOT */
 
@@ -1496,7 +1541,8 @@ dialog_Help_About( GtkWidget *widget, int *message )
 	text_label = gtk_label_new(NULL);
 
 	/* Get the Light Speed! title up */
-	add_pixmap( main_vbox_w, about_window_w, lightspeed_title_xpm );
+	/* Requires many changes to work in GTK3 */
+	// add_pixmap( main_vbox_w, about_window_w, lightspeed_title_xpm );
 
 	sprintf( info_str, STR_DLG_Version_x_y_ARG, VERSION );
 	gtk_label_set_markup(GTK_LABEL(text_label), info_str);
