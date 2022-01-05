@@ -45,7 +45,6 @@
 /* GTK+ */
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
-#include <gtk/gtktext.h>
 #include <gtk/gtkaccelgroup.h>
 
 /* Compile-time settings */
@@ -432,9 +431,9 @@ void keybind( GtkWidget *widget, char *keys );
 GtkWidget *add_hbox( GtkWidget *parent_w, int homog, int spacing );
 GtkWidget *add_vbox( GtkWidget *parent_w, int homog, int spacing );
 GtkWidget *add_frame( GtkWidget *parent_w, const char *title );
-GtkWidget *add_hscale( GtkWidget *parent_w, GtkObject *adjustment );
-GtkWidget *add_vscale( GtkWidget *parent_w, GtkObject *adjustment );
-GtkWidget *add_spin_button( GtkWidget *parent_w, GtkObject *adjustment );
+GtkWidget *add_hscale( GtkWidget *parent_w, GObject *adjustment );
+GtkWidget *add_vscale( GtkWidget *parent_w, GObject *adjustment );
+GtkWidget *add_spin_button( GtkWidget *parent_w, GObject *adjustment );
 GtkWidget *add_check_button( GtkWidget *parent_w, const char *label, int init_state, void *callback, void *callback_data );
 GtkWidget *add_entry( GtkWidget *parent_w, const char *init_str, void *callback, void *callback_data );
 void set_entry_width( GtkWidget *entry_w, const char *span_str );

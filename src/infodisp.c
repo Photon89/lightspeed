@@ -90,17 +90,17 @@ dd_redraw:
 
 	if (disp_velocity) {
 		sprintf( disp_str, STR_INF_velocity_ARG, velocity_string( velocity, TRUE ) );
-		ogl_draw_string( disp_str, POS_BOTTOM_LEFT, 2 );
+		/*TODO: Disable for now in GTK3*/ //ogl_draw_string( disp_str, POS_BOTTOM_LEFT, 2 );
 	}
 
 	if (disp_time_t) {
 		sprintf( disp_str, STR_INF_time_ARG, time_string( ) );
-		ogl_draw_string( disp_str, POS_TOP_LEFT, 2 );
+		/*TODO: Disable for now in GTK3*/ //ogl_draw_string( disp_str, POS_TOP_LEFT, 2 );
 	}
 
 	if (disp_gamma) {
 		sprintf( disp_str, STR_INF_gamma_ARG, lorentz_factor( velocity ) );
-		ogl_draw_string( disp_str, POS_BOTTOM_RIGHT, 1 );
+		/*TODO: Disable for now in GTK3*/ //ogl_draw_string( disp_str, POS_BOTTOM_RIGHT, 1 );
 	}
 
 	/* Get status of each of the warp transforms */
@@ -109,6 +109,8 @@ dd_redraw:
 	no_headlight = !warp( QUERY, MESG_(WARP_HEADLIGHT_EFFECT) );
 	no_doppler = !warp( QUERY, MESG_(WARP_DOPPLER_SHIFT) );
 
+	/*TODO: Disable for now in GTK3*/ 
+	/*
 	if (no_contract && no_doppler && no_headlight && no_deform)
 		ogl_draw_string( STR_INF_no_relativity, POS_TOP_RIGHT, 1 );
 	else {
@@ -124,10 +126,10 @@ dd_redraw:
 		if (no_deform)
 			ogl_draw_string( STR_INF_no_deformation, POS_TOP_RIGHT, 0 );
 	}
-
+	*/
 	if (disp_framerate) {
 		sprintf( disp_str, STR_INF_fps_ARG, framerate );
-		ogl_draw_string( disp_str, POS_TOP_RIGHT, 0 );
+		/*TODO: Disable for now in GTK3*/ //ogl_draw_string( disp_str, POS_TOP_RIGHT, 0 );
 	}
 
 	glEnable( GL_LIGHTING );

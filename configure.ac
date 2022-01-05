@@ -39,7 +39,7 @@ AC_CHECK_FUNCS(getopt_long gettimeofday strcspn strdup strtod)
 
 # Checks for GTK+ libraries.
 #
-AM_PATH_GTK_2_0(2.0.1, , AC_MSG_ERROR([Cannot find proper GTK+ version]))
+PKG_CHECK_MODULES([GTK], [gtk+-3.0])
 
 #
 # Check for OpenGL libraries
@@ -71,11 +71,7 @@ if test -n "$with_gtkgl_prefix" ; then
 	GTKGL_LDOPTS="-L$with_gtkgl_prefix/lib"
 fi
 
-AC_CHECK_LIB(gtkgl-2.0, gtk_gl_area_new, ,
-	AC_MSG_ERROR([Cannot find GtkGLArea library.]),
-	$GTKGL_LDOPTS $GTK_LIBS $GL_LIBS)
-
-GTKGL_LIBS="$GTKGL_LDOPTS -lgtkgl-2.0"
+GTKGL_LIBS="$GTKGL_LDOPTS"
 
 #
 # Test for libpng

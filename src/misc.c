@@ -179,13 +179,18 @@ read_system_clock( void )
 void
 set_cursor_glyph( int glyph )
 {
+	static GdkDisplay *display;
+	static GdkWindow * gdk_window;
 	static GdkCursor *cursor;
 	static int prev_glyph = -1;
 
+	display = gdk_display_get_default();
+	gdk_window = gtk_widget_get_window ( usr_cams[cur_cam]->ogl_w );
+
 	if (prev_glyph != -1)
-		gdk_cursor_destroy( cursor );
-	cursor = gdk_cursor_new( glyph );
-	gdk_window_set_cursor( usr_cams[cur_cam]->ogl_w->window, cursor );
+		g_object_unref( cursor );
+	cursor = gdk_cursor_new_for_display( display, glyph );
+	gdk_window_set_cursor( gdk_window, cursor );
 	prev_glyph = glyph;
 }
 
@@ -443,5 +448,6 @@ ss( void )
 	glHint( GL_POLYGON_SMOOTH_HINT, GL_DONT_CARE );
 	glEnable( GL_LIGHTING );
 	glEnable( GL_DEPTH_TEST );
-	gtk_gl_area_swap_buffers( GTK_GL_AREA(cam->ogl_w) );
+	/*TODO: Disable this for GTK3 temporarily */
+	//gtk_gl_area_swap_buffers( GTK_GL_AREA(cam->ogl_w) );
 }
