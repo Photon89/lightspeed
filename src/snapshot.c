@@ -40,7 +40,8 @@ static int write_tiff( int message, const void *data );
 /* [Other] forward declarations */
 static int write_image( int format, int message, const void *data );
 
-
+/*TODO: Deactivate this for now as in GTK3 font handling is completely different */
+/*
 int
 save_snapshot( int width, int height, const char *filename, int format )
 {
@@ -64,12 +65,12 @@ save_snapshot( int width, int height, const char *filename, int format )
 	char comments[1024];
 	char one_line[256];
 
-	/* Initialize output camera */
+	// Initialize output camera
 	memcpy( &out_cam, usr_cams[0], sizeof(camera) );
 	out_cam.width = width;
 	out_cam.height = height;
 
-	/* Create off-screen rendering buffer (i.e. pixmap) */
+	// Create off-screen rendering buffer (i.e. pixmap)
 	visual = gdk_gl_choose_visual( visual_attributes );
 	if (visual == NULL) {
 		message_window( STR_DLG_Error, STR_MSG_no_ogl_visual );
@@ -86,7 +87,7 @@ save_snapshot( int width, int height, const char *filename, int format )
 	err = !gdk_gl_pixmap_make_current( glpixmap, context );
 	if (err) {
 		message_window( STR_DLG_Error, STR_MSG_no_ogl_context );
-		/*TODO: Had to use g_object_unref instead of gdk_gl_context_unref and gdk_gl_pixmap_unref to make compilation possible */
+		//TODO: Had to use g_object_unref instead of gdk_gl_context_unref and gdk_gl_pixmap_unref to make compilation possible
 		g_object_unref( context );
 		g_object_unref( glpixmap );
 		// gdk_gl_context_unref( context );
@@ -95,18 +96,18 @@ save_snapshot( int width, int height, const char *filename, int format )
 		return -1;
 	}
 
-	/* Basic setup */
+	// Basic setup
 	ogl_initialize( NULL, NULL );
 
-	/* For extra-high quality output */
+	// For extra-high quality output
 	glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
 	glHint( GL_POINT_SMOOTH_HINT, GL_NICEST );
 	glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
 	glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
-	/* GL_LINE_SMOOTH looks crummy */
-	/* glEnable( GL_LINE_SMOOTH ); */
+	// GL_LINE_SMOOTH looks crummy
+	// glEnable( GL_LINE_SMOOTH );
 
-	/* Produce image description (comments) */
+	// Produce image description (comments)
 	if (object_mode == MODE_LATTICE) {
 		sprintf( comments, "%dx%dx%d lattice, travelling at %s",
 		         lattice_size_x, lattice_size_y, lattice_size_z,
@@ -141,10 +142,10 @@ save_snapshot( int width, int height, const char *filename, int format )
 	strcat( comments, one_line );
 	sprintf( one_line, "This image was produced by the Light Speed! relativistic simulator.\n" );
 	strcat( comments, one_line );
-/* TODO: Fix description...? it's inaccurate if an animation is ongoing, or
- * if any of the relativistic transforms are switched off */
+// TODO: Fix description...? it's inaccurate if an animation is ongoing, or
+// if any of the relativistic transforms are switched off
 
-	/* Initialize output file */
+	// Initialize output file
 	err = FALSE;
 	err = err || write_image( format, IMAGE_WIDTH, &width );
 	err = err || write_image( format, IMAGE_HEIGHT, &height );
@@ -156,12 +157,12 @@ save_snapshot( int width, int height, const char *filename, int format )
 	}
 
 	ogl_blank( 0, STR_MSG_Rendering_snapshot );
-	gdk_gl_pixmap_make_current( glpixmap, context ); /* switch back */
+	gdk_gl_pixmap_make_current( glpixmap, context ); // switch back
 
-	/* Draw! */
+	// Draw!
 	ogl_draw( -1 );
 
-	/* Read and export rows of pixels, one by one */
+	// Read and export rows of pixels, one by one
 	scanline = xmalloc( width * 3 * sizeof(GLubyte) );
 	glPixelStorei( GL_PACK_ALIGNMENT, 4 );
 	for (ogl_y = height - 1; ogl_y >= 0; ogl_y--) {
@@ -173,17 +174,17 @@ save_snapshot( int width, int height, const char *filename, int format )
 		if (percent != prev_percent) {
 			sprintf( one_line, STR_MSG_Saving_snapshot_ARG, percent );
 			ogl_blank( 0, one_line );
-			/* switch back to pixmap GL context */
+			// switch back to pixmap GL context
 			gdk_gl_pixmap_make_current( glpixmap, context );
 			prev_percent = percent;
 		}
 	}
 	xfree( scanline );
 
-	/* Close up output file */
+	// Close up output file
 	write_image( format, IMAGE_COMPLETE, NULL );
 
-	/*TODO: Had to use g_object_unref instead of gdk_gl_context_unref and gdk_gl_pixmap_unref to make compilation possible */
+	//TODO: Had to use g_object_unref instead of gdk_gl_context_unref and gdk_gl_pixmap_unref to make compilation possible
 	g_object_unref( context );
 	g_object_unref( glpixmap );
 	// gdk_gl_context_unref( context );
@@ -192,7 +193,7 @@ save_snapshot( int width, int height, const char *filename, int format )
 
 	return err;
 }
-
+*/
 
 /* Dispatcher for the various file format handlers */
 static int

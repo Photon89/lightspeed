@@ -1394,7 +1394,8 @@ menu_Camera_Spawn( GtkWidget *widget, void *dummy )
 	g_signal_connect( G_OBJECT(cam_window_w), "delete_event",
 	                    G_CALLBACK(menu_Camera_Close), NULL );
 	/* Destroy window before exiting */
-	gtk_quit_add_destroy( 1, G_OBJECT(cam_window_w) );
+	/*TODO: This doesn't work in GTK3 */
+	//gtk_quit_add_destroy( 1, G_OBJECT(cam_window_w) );
 
 	/* Main vertical box widget */
 	main_vbox_w = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );

@@ -70,7 +70,7 @@ ogl_initialize( GtkWidget *ogl_w, void *nothing )
 	/* Initialize ogl_draw_string for primary viewport and pixmap buffers
 	 * (other viewports will get this via shared context) */
 	if ((assoc_cam_id( ogl_w ) == 0) || !on_screen)
-		ogl_draw_string( NULL, INITIALIZE, NIL );
+		/*TODO: Disable for now in GTK3*/ //ogl_draw_string( NULL, INITIALIZE, NIL );
 
 	if (on_screen) {
 		/* Call ogl_resize( ) to finish viewport initialization */
@@ -96,9 +96,13 @@ ogl_resize( GtkWidget *ogl_w, GdkEventConfigure *ev_config, void *nothing )
 	static float dummy;
 	int width, height;
 	int i;
+	GtkAllocation* allocation;
 
-	width = ogl_w->allocation.width;
-	height = ogl_w->allocation.height;
+	allocation = g_new(GtkAllocation, 1);
+	gtk_widget_get_allocation( ogl_w, allocation );
+
+	width = allocation->width;
+	height = allocation->height;
 	gtk_gl_area_make_current( GTK_GL_AREA(ogl_w) );
 	glViewport( 0, 0, width, height );
 
@@ -280,7 +284,7 @@ ogl_draw( int cam_id )
 #endif /* 0 */
 
 	/* Initialize string drawer (i.e. inform of viewport dimensions) */
-	ogl_draw_string( cam, RESET, NIL );
+	/*TODO: Disable for now in GTK3*/ //ogl_draw_string( cam, RESET, NIL );
 
 	/* Finally, draw info display (nothing if it's turned off)
 	 * Only the primary camera or an off-screen image gets this */
@@ -288,7 +292,7 @@ ogl_draw( int cam_id )
 		info_display( INFODISP_DRAW, NIL );
 
 	if (drawing_to_screen) {
-		gtk_gl_area_swap_buffers( GTK_GL_AREA(cam->ogl_w) );
+		/*TODO: Disable for now in GTK3*/ //gtk_gl_area_swap_buffers( GTK_GL_AREA(cam->ogl_w) );
 		profile( PROFILE_OGLDRAW_DONE );
 		cam->redraw = FALSE;
 	}
@@ -306,6 +310,8 @@ ogl_draw( int cam_id )
  * NOTE: This function requires some pre-existing state; namely, the target
  * GL context must already be made current as well as properly initialized
  * (see ogl_blank( ) or info_display( ) to see what I mean) */
+ /* TODO: Deactivate this for now as in GTK3 font handling is completely different */
+ /*
 void
 ogl_draw_string( const void *data, int message, int size )
 {
@@ -329,7 +335,7 @@ ogl_draw_string( const void *data, int message, int size )
 
 	switch (message) {
 	case INITIALIZE:
-		/* First-time initialization */
+		// First-time initialization
 		fonts = xmalloc( num_font_sizes * sizeof(GdkFont *) );
 		font_dlist_bases = xmalloc( num_font_sizes * sizeof(unsigned int *) );
 		font_heights = xmalloc( num_font_sizes * sizeof(int *) );
@@ -348,21 +354,21 @@ ogl_draw_string( const void *data, int message, int size )
 		return;
 
 	case RESET:
-		/* Once-per-GL-redraw initialization */
+		// Once-per-GL-redraw initialization
 		cam = (camera *)data;
-		/* Get GL widget dimensions */
+		// Get GL widget dimensions
 		width = cam->width;
 		height = cam->height;
-		/* Reset line counters */
+		// Reset line counters
 		num_tl_lines = 0;
 		num_tr_lines = 0;
 		num_bl_lines = 0;
 		num_br_lines = 0;
 		num_cen_lines = 0;
-		/* Determine upper limit on the font sizes we should use */
+		// Determine upper limit on the font sizes we should use
 		for (i = 0; i < num_font_sizes; i++) {
-			fn_big = i; /* font number of "big" (size 2) font */
-			/* Test string should be minimally 1/3 viewport width */
+			fn_big = i; // font number of "big" (size 2) font
+			// Test string should be minimally 1/3 viewport width
 			if (gdk_string_width( fonts[i], test_str ) > (width / 3))
 				break;
 		}
@@ -374,7 +380,7 @@ ogl_draw_string( const void *data, int message, int size )
 		break;
 	}
 
-	/* Check string for newlines, and queue if necessary */
+	// Check string for newlines, and queue if necessary
 	i = strcspn( disp_str, "\n" );
 	if (i < strlen( disp_str )) {
 		strcpy( str_buf, disp_str );
@@ -385,10 +391,10 @@ ogl_draw_string( const void *data, int message, int size )
 	else
 		next_disp_str = NULL;
 
-	/* Determine which (proportional) font size to use */
-	fn = MIN(fn_big, MAX(0, fn_big - 2 + size)); /* 0 <= fn <= fn_big */
+	// Determine which (proportional) font size to use
+	fn = MIN(fn_big, MAX(0, fn_big - 2 + size)); // 0 <= fn <= fn_big
 
-	/* x coord. of base point */
+	// x coord. of base point
 	switch (pos_code) {
 	case POS_TOP_LEFT:
 	case POS_BOTTOM_LEFT:
@@ -416,7 +422,7 @@ ogl_draw_string( const void *data, int message, int size )
 		return;
 	}
 
-	/* y coord. of base point */
+	// y coord. of base point
 	switch (pos_code) {
 	case POS_BOTTOM_LEFT:
 	case POS_BOTTOM_RIGHT:
@@ -438,7 +444,7 @@ ogl_draw_string( const void *data, int message, int size )
 		break;
 	}
 
-	/* This makes multi-line readouts possible */
+	// This makes multi-line readouts possible
 	switch (pos_code) {
 	case POS_TOP_LEFT:
 		y -= num_tl_lines * font_heights[fn];
@@ -472,22 +478,22 @@ ogl_draw_string( const void *data, int message, int size )
 	glMatrixMode( GL_MODELVIEW );
 	glLoadIdentity( );
 
-	/* Draw text backing */
+	// Draw text backing
 	glColor3f( INFODISP_TEXT_BACK_R, INFODISP_TEXT_BACK_G, INFODISP_TEXT_BACK_B );
 	glRasterPos2i( x + edge_dx, y + edge_dy );
 	glListBase( font_dlist_bases[fn] );
 	glCallLists( strlen(disp_str), GL_UNSIGNED_BYTE, disp_str );
 
-	/* Draw text face */
+	// Draw text face
 	glColor3f( INFODISP_TEXT_FRONT_R, INFODISP_TEXT_FRONT_G, INFODISP_TEXT_FRONT_B );
 	glRasterPos2i( x, y );
 	glCallLists( strlen(disp_str), GL_UNSIGNED_BYTE, disp_str );
 
-	/* Finally, do next line if disp_str had newlines */
+	// Finally, do next line if disp_str had newlines
 	if (next_disp_str != NULL)
 		ogl_draw_string( next_disp_str, pos_code, size );
 }
-
+*/
 
 /* Blanks out a viewport, optionally displaying a [centered] message */
 void
@@ -503,19 +509,19 @@ ogl_blank( int cam_id, const char *blank_message )
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	if (blank_message != NULL) {
-		/* Tell ogl_draw_string( ) about GL widget dimensions */
-		ogl_draw_string( cam, RESET, NIL );
+		/* Tell /*TODO: Disable for now in GTK3*/ //ogl_draw_string( ) about GL widget dimensions */
+		/*TODO: Disable for now in GTK3*/ //ogl_draw_string( cam, RESET, NIL );
 
 		glDisable( GL_DEPTH_TEST );
 		glDisable( GL_LIGHTING );
 
-		ogl_draw_string( blank_message, POS_CENTER, 2 );
+		/*TODO: Disable for now in GTK3*/ //ogl_draw_string( blank_message, POS_CENTER, 2 );
 
 		glEnable( GL_LIGHTING );
 		glEnable( GL_DEPTH_TEST );
 	}
 
-	gtk_gl_area_swap_buffers( GTK_GL_AREA(cam->ogl_w) );
+	/*TODO: Disable for now in GTK3*/ //gtk_gl_area_swap_buffers( GTK_GL_AREA(cam->ogl_w) );
 }
 
 
@@ -527,21 +533,18 @@ GtkWidget *
 ogl_make_widget( void )
 {
 	GtkWidget *primary_ogl_w;
-	int gl_area_attributes[] = {
-	    GDK_GL_RGBA,
-	    GDK_GL_RED_SIZE, 1,
-	    GDK_GL_GREEN_SIZE, 1,
-	    GDK_GL_BLUE_SIZE, 1,
-	    GDK_GL_DEPTH_SIZE, 1,
-	    GDK_GL_DOUBLEBUFFER,
-	    GDK_GL_NONE
-	};
 
 	primary_ogl_w = usr_cams[0]->ogl_w;
+	
+	/*
+	// TODO: There is no gtk_gl_area_share_new() in GTK3...
 	if (primary_ogl_w == NULL)
-		return gtk_gl_area_new( gl_area_attributes );
+		return gtk_gl_area_new( );
 	else
-		return gtk_gl_area_share_new( gl_area_attributes, GTK_GL_AREA(primary_ogl_w) );
+		return gtk_gl_area_share_new( GTK_GL_AREA(primary_ogl_w) );
+		
+	*/
+	return gtk_gl_area_new( );
 }
 
 /* end ogl.c */

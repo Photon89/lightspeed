@@ -43,7 +43,7 @@ add_gl_area( GtkWidget *parent_box_w )
 	/* Attach the signal handlers */
 	g_signal_connect( G_OBJECT(ogl_w), "realize",
 	                    G_CALLBACK(ogl_initialize), NULL );
-	g_signal_connect( G_OBJECT(ogl_w), "expose_event",
+	g_signal_connect( G_OBJECT(ogl_w), "draw",
 	                    G_CALLBACK(ogl_refresh), NULL );
 	g_signal_connect( G_OBJECT(ogl_w), "configure_event",
 	                    G_CALLBACK(ogl_resize), NULL );
@@ -260,6 +260,8 @@ add_radio_menu_item( GtkWidget *menu_w, const char *label, void *callback, void 
 /* Option menu definiton
  * Call this however many times necessary, and then call add_option_menu( )
  * to stick in the finished widget */
+ /*TODO: Possibly this isn't needed in GTK3 any more */
+/*
 GtkWidget *
 option_menu_item( const char *label, void *callback, void *callback_data )
 {
@@ -274,7 +276,7 @@ option_menu_item( const char *label, void *callback, void *callback_data )
 
 	return menu_item_w;
 }
-
+*/
 
 /* The ever-ubiquitous separator */
 void

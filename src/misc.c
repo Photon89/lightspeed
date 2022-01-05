@@ -448,5 +448,6 @@ ss( void )
 	glHint( GL_POLYGON_SMOOTH_HINT, GL_DONT_CARE );
 	glEnable( GL_LIGHTING );
 	glEnable( GL_DEPTH_TEST );
-	gtk_gl_area_swap_buffers( GTK_GL_AREA(cam->ogl_w) );
+	/*TODO: Disable this for GTK3 temporarily */
+	//gtk_gl_area_swap_buffers( GTK_GL_AREA(cam->ogl_w) );
 }

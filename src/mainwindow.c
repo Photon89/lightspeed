@@ -53,7 +53,8 @@ void main_window( void )
 	g_signal_connect( G_OBJECT(main_window_w), "delete_event",
 	                    G_CALLBACK(gtk_main_quit), NULL );
 	/* Destroy window before exiting */
-	gtk_quit_add_destroy( 1, G_OBJECT(main_window_w) );
+	/*TODO: This doesn't work in GTK3 */
+	//gtk_quit_add_destroy( 1, G_OBJECT(main_window_w) );
 
 	/* Main vertical box widget */
 	main_vbox_w = add_vbox( main_window_w, FALSE, 0 );
@@ -231,7 +232,7 @@ void add_Camera_menu( GtkWidget *menu_bar_w, GtkWidget *window_w )
 	else {
 		/* For spawned cameras */
 		menu_item_w = add_menu_item( menu_w, STR_MNU_Close, NULL, G_OBJECT(window_w) );
-		gtk_signal_connect_object( G_OBJECT(menu_item_w), "activate",
+		g_signal_connect( G_OBJECT(menu_item_w), "activate",
 		                           G_CALLBACK(menu_Camera_Close), G_OBJECT(window_w) );
 		keybind( menu_item_w, "^X" );
 	}
