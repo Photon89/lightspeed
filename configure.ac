@@ -67,7 +67,7 @@ AC_ARG_WITH(gtkgl-prefix, [  --with-gtkgl-prefix=PFX Prefix where GtkGLArea is i
 GTKGL_CFLAGS=""
 GTKGL_LDOPTS="" 
 if test -n "$with_gtkgl_prefix" ; then
-	GTKGL_CFLAGS="-I$with_gtkgl_prefix/include"
+	GTKGL_CFLAGS="-I$with_gtkgl_prefix/include/gtkgl-2.0"
 	GTKGL_LDOPTS="-L$with_gtkgl_prefix/lib"
 fi
 
