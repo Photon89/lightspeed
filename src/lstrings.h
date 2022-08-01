@@ -22,6 +22,7 @@
  *  Contributor(s): ______________________________________.''
  */
 
+void setup_gettext();
 
 extern const char *STR_Light_Speed;
 extern const char *STR_copyright_ARG;

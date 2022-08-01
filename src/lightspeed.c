@@ -38,6 +38,8 @@
 static void
 cmdline_help( const char *execname )
 {
+	setup_gettext();
+
 	int i;
 	char opt, *lopt, *desc;
 
@@ -72,6 +74,8 @@ cmdline_help( const char *execname )
 int
 main( int argc, char **argv )
 {
+setup_gettext();
+
 #ifdef HAVE_GETOPT_LONG
 	struct option long_options[4];
 #endif

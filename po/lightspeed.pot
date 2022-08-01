@@ -17,36 +17,80 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lstrings.c:186
+#. Help->Overview text
+#. * (from the OVERVIEW file)
+#: src/lstrings.c:503
+msgid ""
+"\tLight Speed! is a simulator which can illustrate the effects of\n"
+"\tspecial relativity on the appearance of objects travelling at\n"
+"\tultra-high speeds. Depending on the particular speed, and one's\n"
+"\tpoint of view, relativistic effects can cause the object to\n"
+"\tappear shorter, longer, brighter, darker, deformed and/or\n"
+"\toff-color.\n"
+"\t\n"
+"\tTo adjust the velocity, use the slider along the right edge of\n"
+"\tthe main window. You can also type in a value, using the entry\n"
+"\tat the top right (press <Enter> once it is in). To change the\n"
+"\tunits shown, press the button to the right of the entry, and it\n"
+"\twill cycle through a small list.\n"
+"\t\n"
+"\tThe object travels in the positive-x direction, which can be\n"
+"\tvisually checked by activating Objects -> Coordinate axes.\n"
+"\t"
+msgstr ""
+
+#. Help->Controls text
+#. * (from the CONTROLS file)
+#: src/lstrings.c:523
+msgid ""
+"\tMost interactive control is performed with the mouse. By holding\n"
+"\tdown a particular button, and dragging the pointer around,\n"
+"\tvarious camera motions can be obtained:\n"
+"\t\n"
+"\t   Left button:  Revolve camera around view targetg\n"
+"\t\n"
+"\t   Left button + Shift key:  Revolve view target around camera\n"
+"\t\n"
+"\t   Middle button:  Translate camera left, right, up or down\n"
+"\t\n"
+"\t   Right button:  Dolly in or out\n"
+"\t\n"
+"\tThe first and last motions are generally the most useful.\n"
+"\tShould the camera become difficult to control at any point, it\n"
+"\tmay be re-initialized by selecting Camera -> Reset View.\n"
+"\t"
+msgstr ""
+
+#: src/lstrings.c:459
 msgid " seconds"
 msgstr ""
 
 #. Framerate
-#: lstrings.c:129
+#: src/lstrings.c:402
 #, c-format
 msgid "%.1f fps"
 msgstr ""
 
-#: lstrings.c:159
+#: src/lstrings.c:432
 msgid "3D Studio file(*.3ds)"
 msgstr ""
 
-#: lstrings.c:57
+#: src/lstrings.c:327
 msgid "3D file to load on startup (.3DS or .LWO)"
 msgstr ""
 
-#: lstrings.c:219
+#: src/lstrings.c:492
 msgid "<a href='http://lightspeed.sourceforge.net/'>Website</a>"
 msgstr ""
 
 #. %d == version major, %d == version minor
-#: lstrings.c:216
+#: src/lstrings.c:489
 #, c-format
 msgid "<b><span size='x-large'>Light Speed! %s</span></b>"
 msgstr ""
 
 #. %d == width, %d == height
-#: lstrings.c:293
+#: src/lstrings.c:566
 #, c-format
 msgid ""
 "A %dx%d render buffer could not be allocated.\n"
@@ -54,369 +98,323 @@ msgid ""
 msgstr ""
 
 #. %s == author's name
-#: lstrings.c:218
+#: src/lstrings.c:491
 #, c-format
 msgid "A Theory Toy by %s"
 msgstr ""
 
 #. About dialog
-#: lstrings.c:120 lstrings.c:214
+#: src/lstrings.c:393 src/lstrings.c:487
 msgid "About"
 msgstr ""
 
 #. Camera->Info_display submenu
-#: lstrings.c:103
+#: src/lstrings.c:373
 msgid "Active"
 msgstr ""
 
-#: lstrings.c:158
+#: src/lstrings.c:431
 msgid "All 3D object files"
 msgstr ""
 
-#: lstrings.c:295
+#: src/lstrings.c:568
 msgid ""
 "An error occurred in creating the output file.\n"
 "Save operation failed."
 msgstr ""
 
 #. Animation dialog
-#: lstrings.c:181
+#: src/lstrings.c:454
 msgid "Animation"
 msgstr ""
 
-#: lstrings.c:81
+#: src/lstrings.c:351
 msgid "Animation..."
 msgstr ""
 
-#: lstrings.c:94
+#: src/lstrings.c:364
 msgid "Background"
 msgstr ""
 
-#: lstrings.c:187
+#: src/lstrings.c:460
 msgid "Begin"
 msgstr ""
 
 #. Camera->Background submenu colors
 #. * (corresponding color hues are defined in globals.c)
-#: lstrings.c:111
+#: src/lstrings.c:381
 msgid "Black"
 msgstr ""
 
-#: lstrings.c:80
+#: src/lstrings.c:350
 msgid "Bounding box"
 msgstr ""
 
 #. Spawned camera window title
-#: lstrings.c:67 lstrings.c:222
+#: src/lstrings.c:337 src/lstrings.c:495
 msgid "Camera"
 msgstr ""
 
 #. Camera Position dialog
-#: lstrings.c:191
+#: src/lstrings.c:464
 msgid "Camera Position"
 msgstr ""
 
-#: lstrings.c:148
+#: src/lstrings.c:421
 msgid "Cancel"
 msgstr ""
 
-#: lstrings.c:97 lstrings.c:149
+#: src/lstrings.c:367 src/lstrings.c:422
 msgid "Close"
 msgstr ""
 
 #. Controls dialog
-#: lstrings.c:119 lstrings.c:211
+#: src/lstrings.c:392 src/lstrings.c:484
 msgid "Controls"
 msgstr ""
 
 #. Objects menu
-#: lstrings.c:78
+#: src/lstrings.c:348
 msgid "Coordinate axes"
 msgstr ""
 
 #. %d = year, %s = author's name or author's name + e-mail address
-#: lstrings.c:42
+#: src/lstrings.c:312
 #, c-format
 msgid "Copyright (C) %d by %s"
 msgstr ""
 
 #. Camera->Lens submenu
-#: lstrings.c:100
+#: src/lstrings.c:370
 msgid "Custom"
 msgstr ""
 
 #. Custom Lens dialog
-#: lstrings.c:202
+#: src/lstrings.c:475
 msgid "Custom Lens"
 msgstr ""
 
-#: lstrings.c:140
+#: src/lstrings.c:413
 msgid "DOPPLER RED/BLUE SHIFT NOT SHOWN"
 msgstr ""
 
-#: lstrings.c:153
+#: src/lstrings.c:426
 msgid "Dimensions"
 msgstr ""
 
-#: lstrings.c:194
+#: src/lstrings.c:467
 msgid "Direction"
 msgstr ""
 
-#: lstrings.c:85
+#: src/lstrings.c:355
 msgid "Doppler red/blue shift"
 msgstr ""
 
-#: lstrings.c:184
+#: src/lstrings.c:457
 msgid "Ending X"
 msgstr ""
 
-#: lstrings.c:226
+#: src/lstrings.c:499
 msgid "Error"
 msgstr ""
 
-#: lstrings.c:75
+#: src/lstrings.c:345
 msgid "Exit"
 msgstr ""
 
 #. Export SRS dialog
-#: lstrings.c:170
+#: src/lstrings.c:443
 msgid "Export SRS"
 msgstr ""
 
-#: lstrings.c:74
+#: src/lstrings.c:344
 msgid "Export SRS..."
 msgstr ""
 
-#: lstrings.c:204
+#: src/lstrings.c:477
 msgid "Field of view"
 msgstr ""
 
 #. *** MENUS ***
 #. Menu bar headings
-#: lstrings.c:64
+#: src/lstrings.c:334
 msgid "File"
 msgstr ""
 
-#: lstrings.c:79
+#: src/lstrings.c:349
 msgid "Floating grid"
 msgstr ""
 
-#: lstrings.c:166
+#: src/lstrings.c:439
 msgid "Format"
 msgstr ""
 
-#: lstrings.c:107
+#: src/lstrings.c:377
 msgid "Framerate"
 msgstr ""
 
 #. Viewport-centered messages
-#: lstrings.c:298
+#: src/lstrings.c:571
 msgid "GENERATING LATTICE . . ."
 msgstr ""
 
-#: lstrings.c:106
+#: src/lstrings.c:376
 msgid "Gamma factor"
 msgstr ""
 
-#: lstrings.c:95
+#: src/lstrings.c:365
 msgid "Graphics mode"
 msgstr ""
 
-#: lstrings.c:111
+#: src/lstrings.c:382
 msgid "Grey"
 msgstr ""
 
-#: lstrings.c:141
+#: src/lstrings.c:414
 msgid "HEADLIGHT EFFECT NOT SHOWN"
 msgstr ""
 
-#: lstrings.c:86
+#: src/lstrings.c:356
 msgid "Headlight effect"
 msgstr ""
 
-#: lstrings.c:68
+#: src/lstrings.c:338
 msgid "Help"
 msgstr ""
 
-#: lstrings.c:272
+#: src/lstrings.c:545
 msgid "INVALID"
 msgstr ""
 
-#: lstrings.c:93
+#: src/lstrings.c:363
 msgid "Info display"
 msgstr ""
 
-#: lstrings.c:299
+#: src/lstrings.c:572
 msgid "LOADING OBJECT . . ."
 msgstr ""
 
 #. Relativistic toggle messages
-#: lstrings.c:139
+#: src/lstrings.c:412
 msgid "LORENTZ CONTRACTION NOT SHOWN"
 msgstr ""
 
 #. Camera menu
-#: lstrings.c:90
+#: src/lstrings.c:360
 msgid "Lens"
 msgstr ""
 
-#: lstrings.c:203
+#: src/lstrings.c:476
 msgid "Lens length"
 msgstr ""
 
-#. All changes necessary to port Light Speed! to a new language should be
-#. * contained within this file. If modifications are necessary elsewhere in
-#. * the code, please let me know. There are surely a few odd English-specific
-#. * constructs not quite in here yet :-)
-#: lstrings.c:40
+#: src/lstrings.c:310
 msgid "Light Speed!"
 msgstr ""
 
-#. Help->Overview text
-#. * (from the OVERVIEW file)
-#: lstrings.c:230
-msgid ""
-"Light Speed! is a simulator which can illustrate the effects of\n"
-"special relativity on the appearance of objects travelling at\n"
-"ultra-high speeds. Depending on the particular speed, and one's\n"
-"point of view, relativistic effects can cause the object to\n"
-"appear shorter, longer, brighter, darker, deformed and/or\n"
-"off-color.\n"
-"\n"
-"To adjust the velocity, use the slider along the right edge of\n"
-"the main window. You can also type in a value, using the entry\n"
-"at the top right (press <Enter> once it is in). To change the\n"
-"units shown, press the button to the right of the entry, and it\n"
-"will cycle through a small list.\n"
-"\n"
-"The object travels in the positive-x direction, which can be\n"
-"visually checked by activating Objects -> Coordinate axes.\n"
-msgstr ""
-
-#: lstrings.c:160
+#: src/lstrings.c:433
 msgid "LightWave 3D file(*.lwo)"
 msgstr ""
 
 #. Load Object dialog
-#: lstrings.c:157
+#: src/lstrings.c:430
 msgid "Load Object"
 msgstr ""
 
-#: lstrings.c:72
+#: src/lstrings.c:342
 msgid "Load object..."
 msgstr ""
 
-#: lstrings.c:192
+#: src/lstrings.c:465
 msgid "Location"
 msgstr ""
 
-#: lstrings.c:185
+#: src/lstrings.c:458
 msgid "Loop time: "
 msgstr ""
 
 #. Warp menu
-#: lstrings.c:84
+#: src/lstrings.c:354
 msgid "Lorentz contraction"
 msgstr ""
 
-#. Help->Controls text
-#. * (from the CONTROLS file)
-#: lstrings.c:250
-msgid ""
-"Most interactive control is performed with the mouse. By holding\n"
-"down a particular button, and dragging the pointer around,\n"
-"various camera motions can be obtained:\n"
-"\n"
-"   Left button:  Revolve camera around view targetg\n"
-"\n"
-"   Left button + Shift key:  Revolve view target around camera\n"
-"\n"
-"   Middle button:  Translate camera left, right, up or down\n"
-"\n"
-"   Right button:  Dolly in or out\n"
-"\n"
-"The first and last motions are generally the most useful.\n"
-"Should the camera become difficult to control at any point, it\n"
-"may be re-initialized by selecting Camera -> Reset View.\n"
-msgstr ""
-
-#: lstrings.c:143
+#: src/lstrings.c:416
 msgid "NO RELATIVISTIC EFFECTS SHOWN!!!"
 msgstr ""
 
 #. New Lattice dialog
-#: lstrings.c:152
+#: src/lstrings.c:425
 msgid "New lattice"
 msgstr ""
 
 #. File menu
-#: lstrings.c:71
+#: src/lstrings.c:341
 msgid "New lattice..."
 msgstr ""
 
 #. *** DIALOGS ***
 #. *** MESSAGES ***
 #. For quick-and-dirty command feedback
-#: lstrings.c:147 lstrings.c:271
+#: src/lstrings.c:420 src/lstrings.c:544
 msgid "OK"
 msgstr ""
 
-#: lstrings.c:142
+#: src/lstrings.c:415
 msgid "OPTICAL ABERRATION NOT SHOWN"
 msgstr ""
 
-#: lstrings.c:65
+#: src/lstrings.c:335
 msgid "Objects"
 msgstr ""
 
-#: lstrings.c:182
+#: src/lstrings.c:455
 msgid "Observed range of motion"
 msgstr ""
 
-#: lstrings.c:87
+#: src/lstrings.c:357
 msgid "Optical aberration"
 msgstr ""
 
 #. Help menu
 #. Overview dialog
-#: lstrings.c:118 lstrings.c:208
+#: src/lstrings.c:391 src/lstrings.c:481
 msgid "Overview"
 msgstr ""
 
-#: lstrings.c:164 lstrings.c:172
+#: src/lstrings.c:437 src/lstrings.c:445
 msgid "Parameters"
 msgstr ""
 
-#: lstrings.c:195
+#: src/lstrings.c:468
 msgid "Phi [0, 360)"
 msgstr ""
 
-#: lstrings.c:91
+#: src/lstrings.c:361
 msgid "Position..."
 msgstr ""
 
-#: lstrings.c:49
+#: src/lstrings.c:319
 msgid "Print this help screen"
 msgstr ""
 
-#: lstrings.c:300
+#: src/lstrings.c:573
 msgid "RENDERING . . ."
 msgstr ""
 
-#: lstrings.c:173
+#: src/lstrings.c:446
 msgid "Rendered size"
 msgstr ""
 
-#: lstrings.c:199
+#: src/lstrings.c:472
 msgid "Reposition"
 msgstr ""
 
-#: lstrings.c:92
+#: src/lstrings.c:362
 msgid "Reset view"
 msgstr ""
 
 #. %d == percent of snapshot written
-#: lstrings.c:302
+#: src/lstrings.c:575
 #, c-format
 msgid ""
 "SAVING SNAPSHOT . . .\n"
@@ -424,73 +422,73 @@ msgid ""
 msgstr ""
 
 #. Save snapshot dialog
-#: lstrings.c:163
+#: src/lstrings.c:436
 msgid "Save Snapshot"
 msgstr ""
 
-#: lstrings.c:73
+#: src/lstrings.c:343
 msgid "Save snapshot..."
 msgstr ""
 
-#: lstrings.c:115
+#: src/lstrings.c:388
 msgid "Shaded"
 msgstr ""
 
-#: lstrings.c:165
+#: src/lstrings.c:438
 msgid "Size"
 msgstr ""
 
-#: lstrings.c:154
+#: src/lstrings.c:427
 msgid "Smoothness"
 msgstr ""
 
-#: lstrings.c:96
+#: src/lstrings.c:366
 msgid "Spawn camera"
 msgstr ""
 
-#: lstrings.c:171
+#: src/lstrings.c:444
 msgid "Special Relativity Scene (SRS)"
 msgstr ""
 
-#: lstrings.c:198
+#: src/lstrings.c:471
 msgid "Specify (x,y,z) view target instead"
 msgstr ""
 
-#: lstrings.c:197
+#: src/lstrings.c:470
 msgid "Specify phi/theta direction instead"
 msgstr ""
 
-#: lstrings.c:183
+#: src/lstrings.c:456
 msgid "Starting X"
 msgstr ""
 
-#: lstrings.c:174
+#: src/lstrings.c:447
 msgid "Stereoscopic view"
 msgstr ""
 
-#: lstrings.c:188
+#: src/lstrings.c:461
 msgid "Stop"
 msgstr ""
 
-#: lstrings.c:285
+#: src/lstrings.c:558
 msgid ""
 "The 3D Studio file could not be properly read.\n"
 "Import operation failed."
 msgstr ""
 
-#: lstrings.c:286
+#: src/lstrings.c:559
 msgid ""
 "The 3D Studio file has no valid geometry.\n"
 "Import operation failed."
 msgstr ""
 
-#: lstrings.c:287
+#: src/lstrings.c:560
 msgid ""
 "The LightWave file could not be properly read.\n"
 "Import operation failed."
 msgstr ""
 
-#: lstrings.c:288
+#: src/lstrings.c:561
 msgid ""
 "The LightWave file has no valid geometry.\n"
 "Import operation failed."
@@ -498,39 +496,39 @@ msgstr ""
 
 #. File overwrite warning
 #. * %s == filename (basename) of file at risk
-#: lstrings.c:276
+#: src/lstrings.c:549
 #, c-format
 msgid ""
 "The file \"%s\" already exists.\n"
 "Press OK to overwrite it."
 msgstr ""
 
-#: lstrings.c:282
+#: src/lstrings.c:555
 msgid ""
 "The file lacks a valid 3D Studio PRJ signature.\n"
 "Import operation failed."
 msgstr ""
 
-#: lstrings.c:281
+#: src/lstrings.c:554
 msgid ""
 "The file lacks a valid 3DS signature.\n"
 "Import operation failed."
 msgstr ""
 
-#: lstrings.c:283
+#: src/lstrings.c:556
 msgid ""
 "The file lacks a valid LWOB signature.\n"
 "Import operation failed."
 msgstr ""
 
-#: lstrings.c:284
+#: src/lstrings.c:557
 msgid ""
 "The object must be in 3D Studio (3DS)\n"
 "or LightWave 3D (LWO) file format.\n"
 "Import operation failed."
 msgstr ""
 
-#: lstrings.c:294
+#: src/lstrings.c:567
 msgid ""
 "The required OpenGL context was not available.\n"
 "Save operation failed."
@@ -538,7 +536,7 @@ msgstr ""
 
 #. Object importer error messages
 #. %s == (bogus) filename
-#: lstrings.c:280
+#: src/lstrings.c:553
 #, c-format
 msgid ""
 "The specified object file could not be opened.\n"
@@ -547,111 +545,111 @@ msgid ""
 msgstr ""
 
 #. Snapshot exporter error messages
-#: lstrings.c:291
+#: src/lstrings.c:564
 msgid ""
 "The system could not provide the required visual.\n"
 "Save operation failed."
 msgstr ""
 
-#: lstrings.c:196
+#: src/lstrings.c:469
 msgid "Theta [-90, 90]"
 msgstr ""
 
-#: lstrings.c:105
+#: src/lstrings.c:375
 msgid "Time t"
 msgstr ""
 
-#: lstrings.c:52
+#: src/lstrings.c:322
 msgid "Use advanced interface (default)"
 msgstr ""
 
-#: lstrings.c:55
+#: src/lstrings.c:325
 msgid "Use more advanced interface"
 msgstr ""
 
-#: lstrings.c:54
+#: src/lstrings.c:324
 msgid "Use simple interface (default)"
 msgstr ""
 
-#: lstrings.c:51
+#: src/lstrings.c:321
 msgid "Use simplified interface"
 msgstr ""
 
-#: lstrings.c:104
+#: src/lstrings.c:374
 msgid "Velocity"
 msgstr ""
 
 #. Velocity
 #. * %s == velocity strings as returned by velocity_string( ???, TRUE )
-#: lstrings.c:133
+#: src/lstrings.c:406
 #, c-format
 msgid "Velocity: %s"
 msgstr ""
 
-#: lstrings.c:111
+#: src/lstrings.c:384
 msgid "Very white"
 msgstr ""
 
-#: lstrings.c:193
+#: src/lstrings.c:466
 msgid "View target"
 msgstr ""
 
-#: lstrings.c:175
+#: src/lstrings.c:448
 msgid "Visible faces only"
 msgstr ""
 
 #. Miscellaneous dialog titles
-#: lstrings.c:225
+#: src/lstrings.c:498
 msgid "Warning"
 msgstr ""
 
-#: lstrings.c:66
+#: src/lstrings.c:336
 msgid "Warp"
 msgstr ""
 
-#: lstrings.c:111
+#: src/lstrings.c:383
 msgid "White"
 msgstr ""
 
 #. Camera->Graphics_mode submenu
-#: lstrings.c:114
+#: src/lstrings.c:387
 msgid "Wireframe"
 msgstr ""
 
-#: lstrings.c:205
+#: src/lstrings.c:478
 msgid "deg"
 msgstr ""
 
 #. Gamma factor
-#: lstrings.c:136
+#: src/lstrings.c:409
 #, c-format
 msgid "gamma = %.3f"
 msgstr ""
 
 #. basename1 is for lattices, basename2 is for imported geometry
-#: lstrings.c:177
+#: src/lstrings.c:450
 msgid "lattice"
 msgstr ""
 
-#: lstrings.c:178
+#: src/lstrings.c:451
 msgid "object"
 msgstr ""
 
-#: lstrings.c:167
+#: src/lstrings.c:440
 msgid "snapshot"
 msgstr ""
 
 #. *** INFO DISPLAY ***
 #. Time t
 #. * %s == time string as returned by time_string( )
-#: lstrings.c:126
+#: src/lstrings.c:399
 #, c-format
 msgid "t = %ssec"
 msgstr ""
 
 #. *** COMMAND-LINE INTERFACE ***
 #. %s = executable name
-#: lstrings.c:47
+#: src/lstrings.c:317
 #, c-format
 msgid "usage: %s [-hsa] [object]"
 msgstr ""
