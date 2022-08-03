@@ -44,7 +44,7 @@
 
 /* GTK+ */
 #include <gtk/gtk.h>
-#include <gtkgl-2.0/gtkgl/gtkglarea.h>
+#include <gtkgl/gtkglarea.h>
 #include <gtk/gtktext.h>
 #include <gtk/gtkaccelgroup.h>
 
