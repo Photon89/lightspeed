@@ -30,7 +30,6 @@ lightspeed_SOURCES = \
         ogl.c \
         read3ds.c \
         readlwo.c \
-        snapshot.c \
         trackmem.c \
         warp.c
 

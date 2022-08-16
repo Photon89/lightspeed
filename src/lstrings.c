@@ -69,8 +69,6 @@ const char *STR_MNU_Help		= "Help";
 /* File menu */
 const char *STR_MNU_New_lattice		= "New lattice...";
 const char *STR_MNU_Load_object		= "Load object...";
-const char *STR_MNU_Save_snapshot	= "Save snapshot...";
-const char *STR_MNU_Export_srs		= "Export SRS...";
 const char *STR_MNU_Exit		= "Exit";
 
 /* Objects menu */
@@ -157,24 +155,6 @@ const char *STR_DLG_Load_Object		= "Load Object";
 const char *STR_DLG_formats_all		= "All 3D object files";
 const char *STR_DLG_formats_3ds		= "3D Studio file(*.3ds)";
 const char *STR_DLG_formats_lwo		= "LightWave 3D file(*.lwo)";
-
-/* Save snapshot dialog */
-const char *STR_DLG_Save_Snapshot	= "Save Snapshot";
-const char *STR_DLG_snapshot_Parameters	= "Parameters";
-const char *STR_DLG_snapshot_Size	= "Size";
-const char *STR_DLG_snapshot_Format	= "Format";
-const char *STR_DLG_snapshot_basename	= "snapshot";
-
-/* Export SRS dialog */
-const char *STR_DLG_Export_srs		= "Export SRS";
-const char *STR_DLG_srs			= "Special Relativity Scene (SRS)";
-const char *STR_DLG_srs_Parameters	= "Parameters";
-const char *STR_DLG_srs_Size		= "Rendered size";
-const char *STR_DLG_srs_Stereo_view	= "Stereoscopic view";
-const char *STR_DLG_srs_Vis_faces_only	= "Visible faces only";
-/* basename1 is for lattices, basename2 is for imported geometry */
-const char *STR_DLG_srs_basename1	= "lattice";
-const char *STR_DLG_srs_basename2	= "object";
 
 /* Animation dialog */
 const char *STR_DLG_Animation		= "Animation";
@@ -286,19 +266,9 @@ const char *STR_MSG_empty_3ds_file	= "The 3D Studio file has no valid geometry.\
 const char *STR_MSG_bad_lwo_file	= "The LightWave file could not be properly read.\nImport operation failed.";
 const char *STR_MSG_empty_lwo_file	= "The LightWave file has no valid geometry.\nImport operation failed.";
 
-/* Snapshot exporter error messages */
-const char *STR_MSG_no_ogl_visual	= "The system could not provide the required visual.\nSave operation failed.";
-/* %d == width, %d == height */
-const char *STR_MSG_no_render_buf_ARG	= "A %dx%d render buffer could not be allocated.\nSave operation failed.";
-const char *STR_MSG_no_ogl_context	= "The required OpenGL context was not available.\nSave operation failed.";
-const char *STR_MSG_no_snapshot_output	= "An error occurred in creating the output file.\nSave operation failed.";
-
 /* Viewport-centered messages */
 const char *STR_MSG_Generating_lattice	= "GENERATING LATTICE . . .";
 const char *STR_MSG_Importing_object	= "LOADING OBJECT . . .";
-const char *STR_MSG_Rendering_snapshot	= "RENDERING . . .";
-/* %d == percent of snapshot written */
-const char *STR_MSG_Saving_snapshot_ARG	= "SAVING SNAPSHOT . . .\n(%d%%)";
 
 
 void setup_gettext() {
@@ -340,8 +310,6 @@ void setup_gettext() {
 	/* File menu */
 	STR_MNU_New_lattice			= _("New lattice...");
 	STR_MNU_Load_object			= _("Load object...");
-	STR_MNU_Save_snapshot			= _("Save snapshot...");
-	STR_MNU_Export_srs			= _("Export SRS...");
 	STR_MNU_Exit				= _("Exit");
 
 	/* Objects menu */
@@ -431,24 +399,6 @@ void setup_gettext() {
 	STR_DLG_formats_all			= _("All 3D object files");
 	STR_DLG_formats_3ds			= _("3D Studio file(*.3ds)");
 	STR_DLG_formats_lwo			= _("LightWave 3D file(*.lwo)");
-
-	/* Save snapshot dialog */
-	STR_DLG_Save_Snapshot			= _("Save Snapshot");
-	STR_DLG_snapshot_Parameters		= _("Parameters");
-	STR_DLG_snapshot_Size			= _("Size");
-	STR_DLG_snapshot_Format			= _("Format");
-	STR_DLG_snapshot_basename		= _("snapshot");
-
-	/* Export SRS dialog */
-	STR_DLG_Export_srs			= _("Export SRS");
-	STR_DLG_srs				= _("Special Relativity Scene (SRS)");
-	STR_DLG_srs_Parameters			= _("Parameters");
-	STR_DLG_srs_Size			= _("Rendered size");
-	STR_DLG_srs_Stereo_view			= _("Stereoscopic view");
-	STR_DLG_srs_Vis_faces_only		= _("Visible faces only");
-	/* basename1 is for lattices, basename2 is for imported geometry */
-	STR_DLG_srs_basename1			= _("lattice");
-	STR_DLG_srs_basename2			= _("object");
 
 	/* Animation dialog */
 	STR_DLG_Animation			= _("Animation");
@@ -560,19 +510,10 @@ void setup_gettext() {
 	STR_MSG_bad_lwo_file			= _("The LightWave file could not be properly read.\nImport operation failed.");
 	STR_MSG_empty_lwo_file			= _("The LightWave file has no valid geometry.\nImport operation failed.");
 
-	/* Snapshot exporter error messages */
-	STR_MSG_no_ogl_visual			= _("The system could not provide the required visual.\nSave operation failed.");
-	/* %d == width, %d == height */
-	STR_MSG_no_render_buf_ARG		= _("A %dx%d render buffer could not be allocated.\nSave operation failed.");
-	STR_MSG_no_ogl_context			= _("The required OpenGL context was not available.\nSave operation failed.");
-	STR_MSG_no_snapshot_output		= _("An error occurred in creating the output file.\nSave operation failed.");
-
 	/* Viewport-centered messages */
 	STR_MSG_Generating_lattice		= _("GENERATING LATTICE . . .");
 	STR_MSG_Importing_object		= _("LOADING OBJECT . . .");
-	STR_MSG_Rendering_snapshot		= _("RENDERING . . .");
-	/* %d == percent of snapshot written */
-	STR_MSG_Saving_snapshot_ARG		= _("SAVING SNAPSHOT . . .\n(%d%%)");
+
 }
 
 /* end lstrings.c */

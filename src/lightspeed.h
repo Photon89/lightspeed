@@ -59,15 +59,6 @@
 
 /**** Constants/macros ***************************************************/
 
-/* We need >=1 image library to save snapshots */
-//#if (HAVE_LIBPNG || HAVE_LIBTIFF)
-/* Snapshot export crashes, so deactivate it completely for now */
-#if (FALSE)
-#define CAN_SAVE_SNAPSHOT
-#else
-#undef CAN_SAVE_SNAPSHOT
-#endif
-
 /* C = speed of light in meters/sec */
 #define C			299792458.0
 /* MAX_VELOCITY < C */
@@ -193,16 +184,6 @@ enum {
 	Z_ROTATE_CW,
 	Z_ROTATE_CCW,
 
-	/* for image handling, esp. save_snapshot( ) */
-	IMAGE_FORMAT,
-	IMAGE_FORMAT_PNG,
-	IMAGE_FORMAT_TIFF,
-	IMAGE_WIDTH,
-	IMAGE_HEIGHT,
-	IMAGE_COMMENTS,
-	IMAGE_FILENAME,
-	IMAGE_PIXELROW,
-	IMAGE_COMPLETE
 };
 
 
@@ -471,9 +452,6 @@ void dialog_File_NewLattice( GtkWidget *widget, const int *message );
 #ifdef WITH_OBJECT_IMPORTER
 void dialog_File_ImportObject( GtkWidget *widget, const int *message );
 #endif /* WITH_OBJECT_IMPORTER */
-#ifdef CAN_SAVE_SNAPSHOT
-void dialog_File_SaveSnapshot( GtkWidget *widget, const int *message );
-#endif /* CAN_SAVE_SNAPSHOT */
 #ifdef WITH_SRS_EXPORTER
 void dialog_File_ExportSRS( GtkWidget *widget, const int *message );
 #endif /* WITH_SRS_EXPORTER */
@@ -520,9 +498,6 @@ void ogl_draw( int cam_id );
 void ogl_draw_string( const void *data, int message, int size );
 void ogl_blank( int cam_id, const char *blank_message );
 GtkWidget *ogl_make_widget( void);
-
-/* snapshot.c */
-int save_snapshot( int width, int height, const char *filename, int format );
 
 /* warp.c */
 int warp( int message, void *data );
