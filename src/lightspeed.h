@@ -452,9 +452,6 @@ void dialog_File_NewLattice( GtkWidget *widget, const int *message );
 #ifdef WITH_OBJECT_IMPORTER
 void dialog_File_ImportObject( GtkWidget *widget, const int *message );
 #endif /* WITH_OBJECT_IMPORTER */
-#ifdef WITH_SRS_EXPORTER
-void dialog_File_ExportSRS( GtkWidget *widget, const int *message );
-#endif /* WITH_SRS_EXPORTER */
 void menu_Objects_toggles( GtkWidget *widget, const int *message );
 void dialog_Objects_Animation( GtkWidget *widget, const int *message );
 void menu_Warp_toggles( GtkWidget *widget, const int *message );

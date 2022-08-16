@@ -80,13 +80,6 @@ void main_window( void )
 	menu_item_w = add_menu_item( menu_w, STR_MNU_Load_object, dialog_File_ImportObject, MESG_(DIALOG_OPEN) );
 	keybind( menu_item_w, "^O" );
 #endif
-#ifdef CAN_SAVE_SNAPSHOT
-	menu_item_w = add_menu_item( menu_w, STR_MNU_Save_snapshot, dialog_File_SaveSnapshot, MESG_(DIALOG_OPEN) );
-	keybind( menu_item_w, "^S" );
-#endif
-#ifdef WITH_SRS_EXPORTER
-	add_menu_item( menu_w, STR_MNU_Export_srs, dialog_File_ExportSRS, MESG_(DIALOG_OPEN) );
-#endif
 	add_separator( menu_w );
 	menu_item_w = add_menu_item( menu_w, STR_MNU_Exit, gtk_main_quit, NULL );
 	keybind( menu_item_w, "^Q" );
